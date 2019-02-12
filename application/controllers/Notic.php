@@ -90,6 +90,11 @@ class NoticController extends \BaseController {
             $param ['pic'] = $this->getParamList('pic');
             $param ['video'] = $this->getParamList('video');
 			$param ['updatetime'] = time ();
+
+			$param ['homeShow'] = trim($this->getParamList('homeShow'));
+            $param ['startTime'] = trim($this->getParamList('startTime'));
+			$param ['endTime'] = trim($this->getParamList('endTime'));
+			
 			$data = $this->model->updateNoticById ( $param, $id );
 			$data = $this->convertor->statusConvertor ( $data );
 		} else {
@@ -119,6 +124,11 @@ class NoticController extends \BaseController {
         $param ['video'] = trim($this->getParamList('video'));
 		$param ['updatetime'] = time ();
 		$param ['createtime'] = time ();
+
+		$param ['homeShow'] = trim($this->getParamList('homeShow'));
+		$param ['startTime'] = trim($this->getParamList('startTime'));
+		$param ['endTime'] = trim($this->getParamList('endTime'));
+			
 		$data = $this->model->addNotic ( $param );
 		$data = $this->convertor->statusConvertor ( array ('id' => $data ) );
 		$this->echoSuccessData ( $data );

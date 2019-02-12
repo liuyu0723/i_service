@@ -120,6 +120,11 @@ class Convertor_Activity extends Convertor_Base {
             $activityTemp ['fromdate'] = $value ['fromdate'];
             $activityTemp ['todate'] = $value ['todate'];
             $activityTemp ['count'] = $value ['count'];
+
+            $activityTemp ['homeShow'] = $value ['homeShow'];
+            $activityTemp ['startTime'] = date('Y-m-d H:i:s', $value ['startTime']);
+            $activityTemp ['endTime'] = date('Y-m-d H:i:s', $value ['endTime']);
+
             $data ['list'] [] = $activityTemp;
         }
         $data ['total'] = $count;

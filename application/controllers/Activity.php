@@ -125,6 +125,11 @@ class ActivityController extends \BaseController {
             $param ['sort'] = $this->getParamList('sort');
             $param ['pdf'] = $this->getParamList('pdf');
             $param ['video'] = $this->getParamList('video');
+
+            $param ['homeShow'] = trim($this->getParamList('homeShow'));
+            $param ['startTime'] = trim($this->getParamList('startTime'));
+            $param ['endTime'] = trim($this->getParamList('endTime'));
+
             $data = $this->model->updateActivityById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -153,6 +158,11 @@ class ActivityController extends \BaseController {
         $param ['sort'] = intval($this->getParamList('sort'));
         $param ['pdf'] = trim($this->getParamList('pdf'));
         $param ['video'] = trim($this->getParamList('video'));
+        
+        $param ['homeShow'] = trim($this->getParamList('homeShow'));
+        $param ['startTime'] = trim($this->getParamList('startTime'));
+        $param ['endTime'] = trim($this->getParamList('endTime'));
+
         $data = $this->model->addActivity($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);

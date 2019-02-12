@@ -41,6 +41,11 @@ class Convertor_Promotion extends Convertor_Base {
             $newTemp ['createtime'] = $news ['createtime'];
             $newTemp ['updatetime'] = $news ['updatetime'];
             $newTemp ['url'] = $news ['url'];
+
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $promotionCount;
@@ -95,6 +100,11 @@ class Convertor_Promotion extends Convertor_Base {
             $newTemp ['createTime'] = $news ['createtime'];
             $newTemp ['updateTime'] = $news ['updatetime'];
             $newTemp ['url'] = $news ['url'];
+            
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $promotionCount;

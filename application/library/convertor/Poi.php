@@ -177,8 +177,6 @@ class Convertor_Poi extends Convertor_Base {
     public function getHomeAdvConvertor($poiList) {
         $data = array('list' => array());
         foreach ($poiList as $pois) {
-            $pois ['pdf'] = $pois['pdf'] ? Enum_Img::getPathByKeyAndType($pois['pdf']) : '';
-            $pois ['video'] = $pois['video'] ? Enum_Img::getPathByKeyAndType($pois['video']) : '';
             $pois ['pic'] = $pois['pic'] ? Enum_Img::getPathByKeyAndType($pois['pic'], Enum_Img::PIC_TYPE_KEY_WIDTH750) : '';
             $pois ['updatetime'] = $pois['updatetime'] ? date('Y-m-d H:i:s', $pois['updatetime']) : '';
             $data ['list'] [] = $pois;

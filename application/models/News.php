@@ -97,6 +97,10 @@ class NewsModel extends \BaseModel {
             isset($param ['enable_lang2']) ? $info ['enable_lang2'] = $param ['enable_lang2'] : false;
             isset($param ['enable_lang3']) ? $info ['enable_lang3'] = $param ['enable_lang3'] : false;
 
+            isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
+            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
+            isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
+
             $result = $this->dao->updateNewsById($info, $id);
         }
         return $result;

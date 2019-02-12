@@ -40,6 +40,11 @@ class Convertor_Notic extends Convertor_Base {
             $newTemp ['createtime'] = $notic ['createtime'];
             $newTemp ['updatetime'] = $notic ['updatetime'];
             $newTemp ['pic'] = Enum_Img::getPathByKeyAndType($notic['pic'], Enum_Img::PIC_TYPE_KEY_WIDTH750);
+
+            $newTemp ['homeShow'] = $notic ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $notic ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $notic ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $noticCount;
@@ -90,6 +95,11 @@ class Convertor_Notic extends Convertor_Base {
             $noticTemp ['createTime'] = $notic ['createtime'];
             $noticTemp ['updateTime'] = $notic ['updatetime'];
             $noticTemp ['pic'] = $notic ['pic'];
+
+            $noticTemp ['homeShow'] = $notic ['homeShow'];
+            $noticTemp ['startTime'] = date('Y-m-d H:i:s', $notic ['startTime']);
+            $noticTemp ['endTime'] = date('Y-m-d H:i:s', $notic ['endTime']);
+
             $data ['list'] [] = $noticTemp;
         }
         $data ['total'] = $noticCount;
