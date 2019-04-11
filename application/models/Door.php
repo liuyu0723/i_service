@@ -16,7 +16,7 @@ class DoorModel extends \BaseModel
     }
 
     /**
-     * 获取Shopping列表信息
+     * 开门
      *
      * @param
      *            array param 

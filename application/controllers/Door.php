@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 酒店体验式购物控制器类
+ * 酒店开门控制器类
  *
  */
 class DoorController extends \BaseController

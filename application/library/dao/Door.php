@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 体验购物管理数据层
+ * 酒店开门数据层
  */
 class Dao_Door extends Dao_Base
 {
@@ -58,7 +58,16 @@ class Dao_Door extends Dao_Base
     }
 
 
-
+    /**
+     * 生成房间请求XML
+     *
+     * @param
+     *            array 入参
+     *            ROOMCODE  房间名称（门锁管理软件中房间名称） 
+     *            CUSCODE   账号或卡号 
+     *            IDCODE    信息登记时证件号码 
+     * @return string
+     */
     private function getRoomInfoRequestXML(array $param): string
     {
         $room_code = $param['ROOMCODE'];
@@ -108,6 +117,16 @@ class Dao_Door extends Dao_Base
     }
 
 
+    /**
+     * 生成开门请求XML
+     *
+     * @param
+     *            array 入参
+     *            ROOMCODE  房间名称（门锁管理软件中房间名称） 
+     *            CUSCODE   账号或卡号 
+     *            IDCODE    信息登记时证件号码 
+     * @return string
+     */
     private function getOpenLockRequestXML(array $param): string
     {
 
@@ -170,12 +189,24 @@ class Dao_Door extends Dao_Base
 
     // private function getLockStatus()
 
+
+
+    /**
+     * 发送数据到门锁管理系统
+     *
+     * @param
+     *            array 入参
+     *            ROOMCODE  房间名称（门锁管理软件中房间名称） 
+     *            CUSCODE   账号或卡号 
+     *            IDCODE    信息登记时证件号码 
+     * @return string
+     */
     private function sendRequest($xml): string
     {
 
         // send request to server
         // TODO: set this url to setting
-        $url = "http://";
+        $url = "http://183.239.170.26：6007";
 
         $header = "POST HTTP/1.0 \r\n";
         $header .= "Content-type: text/xml \r\n";
