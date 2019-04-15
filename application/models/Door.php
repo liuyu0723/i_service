@@ -28,6 +28,6 @@ class DoorModel extends \BaseModel
     public function openDoor(array $param)
     {
         // TODO: check param
-        return $this->dao->openDoor($param);
+        return $this->dao->openLock($param);
     }
 }
