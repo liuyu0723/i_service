@@ -6,14 +6,15 @@
 class Dao_Door extends Dao_Base
 {
 
-    private $sys_process_time = "";
+    private $access_key = "";
 
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->sys_process_time = date("ymdHisv");
+        // TODO set access key
+
     }
 
 
@@ -84,9 +85,13 @@ class Dao_Door extends Dao_Base
         $bipcode = $domtree->createElement("BIPCODE", 101);
         $procid = $domtree->createElement("PROCID", 2);
         // YY MM DD HH MI SS ZZZ 
-        $processtime = $domtree->createElement("PROCESSTIME", $this->sys_process_time);
+        $sys_process_time = date("ymdHisv");
+        $processtime = $domtree->createElement("PROCESSTIME", $sys_process_time);
         // TODO: need replace it into setting.
-        $sign = $domtree->createElement("sign", "d4526f67e132bbc8eca235185e56b095");
+
+        $sign_code = md5("101" . "2" . $sys_process_time . $this->access_key);
+
+        $sign = $domtree->createElement("sign", $sign_code);
 
         $svchead = $domtree->createElement("SVCHEAD");
 
@@ -149,9 +154,13 @@ class Dao_Door extends Dao_Base
         $bipcode = $domtree->createElement("BIPCODE", 103);
         $procid = $domtree->createElement("PROCID", 2);
         // YY MM DD HH MI SS ZZZ 
-        $processtime = $domtree->createElement("PROCESSTIME", $this->sys_process_time);
+        $sys_process_time = date("ymdHisv");
+        $processtime = $domtree->createElement("PROCESSTIME", $sys_process_time);
         // TODO: need replace it into setting.
-        $sign = $domtree->createElement("sign", "d4526f67e132bbc8eca235185e56b095");
+
+        $sign_code = md5("103" . "2" . $sys_process_time . $this->access_key);
+
+        $sign = $domtree->createElement("sign", $sign_code);
 
         $svchead = $domtree->createElement("SVCHEAD");
 
@@ -206,7 +215,7 @@ class Dao_Door extends Dao_Base
 
         // send request to server
         // TODO: set this url to setting
-        $url = "http://183.239.170.26：6007";
+        $url = "http://183.239.170.26:6007/wsdl/IBWHISIFSERVER";
 
         $header = "POST HTTP/1.0 \r\n";
         $header .= "Content-type: text/xml \r\n";
