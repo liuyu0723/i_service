@@ -33,40 +33,93 @@ class Dao_Door extends Dao_Base
     public function openLock(array $param)
     {
 
+
+        $value = 'Door has been open succ';
+
+
+        /*
+        *
+        *
+        *GET ROOM INFO
+        *
+        *
+        */
         // get xml request
         $room_info_request_xml = $this->getRoomInfoRequestXML($param);
-        print_r('get lock code request data has been sent \r\n');
-        // var_dump($room_info_request_xml);
         // get room info
         $room_info = $this->sendRequest($room_info_request_xml);
-        //print_r($room_info);
+        
+
         // get lock code from room info
         // TODO: add validation for xml
-        $room_info_xml = simplexml_load_string($room_info);
-        $lock_code = $room_info_xml->SVCCONT->LOCKCODE;
-        // var_dump($lock_code);
-        
+        $room_info_xml = simplexml_load_string($room_info);        
+        $lock_code = $room_info_xml->SVCHEAD->ROOMLIST;
+
         if(!isset($lock_code)){
-            echo 'Room not found. Using test lock code to open the door\r\n';
+            //print_r('<br />');
+            //print_r ('Room not found. Using test lock code to open the door <br />');
 
             $lock_code = '010101';
         }
         
+
+        $lock_code = '010101';
+
         $param['LOCKCODE'] = $lock_code;
 
-
+        /*
+        *
+        *
+        * OPEN LOCK
+        *
+        *
+        */
         // get open lock request
         $lock_open_request_xml = $this->getOpenLockRequestXML($param);
-        print_r('door open request data has been sent \r\n');
-        // var_dump($lock_open_request_xml);
-
-        
 
         // send request 
-        $lock_info = $this->sendRequest($lock_open_request_xml);
-        //print_r($lock_info);
+        $lock_info = $this->sendRequest($lock_open_request_xml);       
 
-        return "door open succ";
+        // print_r('open lock response data <br />');
+        // var_dump($lock_info);
+        // print_r('<br />');
+
+        // get lock status
+        // TODO: add validation for xml
+        $lock_info_xml = simplexml_load_string($lock_info);
+        $svrbtime = $lock_info_xml->SVCHEAD->PROCESSTIME;
+
+        // print_r('get svrbtime <br />');
+        // var_dump($svrbtime . '');
+        // print_r('<br />');
+
+        $param['SVRBTIME'] = $svrbtime;
+
+
+        /*
+        *
+        *
+        * GET LOCK STATUS
+        *
+        *
+        */
+        // get lock status request
+        $lock_status_request_xml = $this->getLockStatusRequestXML($param);
+        // print_r('lock status request data <br />');
+        // var_dump($lock_status_request_xml);
+        // print_r('<br />');
+
+        // send request 
+        $lock_status = $this->sendRequest($lock_status_request_xml);
+        // print_r('lock status response data <br />');
+        // var_dump($lock_status);
+        // print_r('<br />');
+
+        $lock_status_xml = simplexml_load_string($lock_status);
+        $lock_status_code = $lock_status_xml->SVCCONT->RESPCODE;
+
+
+        return $value . ' lock ('. $lock_code .') status code = ' . $lock_status_code;
     }
 
 
@@ -153,7 +206,48 @@ class Dao_Door extends Dao_Base
     }
 
 
-    // private function getLockStatus()
+      /**
+     * 获取门锁状态XML
+     *
+     * @param
+     *            array 入参
+     *            CUSCODE  账号或卡号 
+     *            LOCKCODE   门锁编号
+     *            SVRBTIME    远程开门申请后服务端回复的处理时间
+     * @return string
+     */
+    private function getLockStatusRequestXML(array $param): string
+    {
+
+        // get required data
+        $cus_code = $param['CUSCODE'];
+        $lock_code = $param['LOCKCODE'];
+        $svrb_time = $param['SVRBTIME'];
+
+        $sys_process_time = date("ymdHisv");
+
+        $sign_code = md5("104" . "2" . $sys_process_time . $this->access_key);
+
+        $request_data = '
+            <SVCINTER>
+                <SVCHEAD>
+                    <BIPCODE>104</BIPCODE>
+                    <PROCID>2</PROCID>
+                    <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
+                    <sign>'. $sign_code .'</sign>
+                </SVCHEAD>
+                <SVCCONT>
+                    <CUSCODE>'. $cus_code .'</CUSCODE>
+                    <LOCKCODE>'. $lock_code .'</LOCKCODE>
+                    <SVRBTIME>'. $svrb_time .'</SVRBTIME>
+                </SVCCONT>
+            </SVCINTER>
+        ';
+
+
+
+        return  $request_data;
+    }
 
 
 
@@ -172,60 +266,15 @@ class Dao_Door extends Dao_Base
 
         // send request to server
         // TODO: set this url to setting
-        $url = "http://183.239.170.26:6007/soap/IBWHISIFSERVER";
+        $client = new SoapClient("http://183.239.170.26:6007/wsdl/IBWHISIFSERVER");
 
 
-        // build request 
-        $request_data = '
-            <soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-                xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:BWHISIFSERVERIntf-IBWHISIFSERVER">
-                <soapenv:Header/>
-                <soapenv:Body>
-                    <urn:BWHISOPIF soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-                        <QuestXml xsi:type="xsd:string">
-                        
-                        '. $xml .'                
-                
-                        </QuestXml>
-                    </urn:BWHISOPIF>
-                </soapenv:Body>
-            </soapenv:Envelope>
-        ';
-
-
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 3000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $request_data,
-            CURLOPT_HTTPHEADER => array(
-              "Content-Type: text/xml;charset=UTF-8
-              "
-            ),
-          ));
-
-
-        $data = curl_exec($curl);
-
-
-        if (curl_errno($curl)) {
-            // show error
-            echo 'Curl error: ' . curl_error($curl);
-        } else {
-            // close 
-            curl_close($curl);
-        }
-
+        $result = $client->__soapCall("BWHISOPIF", array( 
+            "QuestXml" => $xml
+        )); 
 
         
 
-        return $data;
+        return $result;
     }
 }
