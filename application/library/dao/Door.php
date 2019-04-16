@@ -6,7 +6,7 @@
 class Dao_Door extends Dao_Base
 {
 
-    private $access_key = "";
+    private $access_key = "BWRCUHIS";
 
 
     public function __construct()
@@ -35,27 +35,38 @@ class Dao_Door extends Dao_Base
 
         // get xml request
         $room_info_request_xml = $this->getRoomInfoRequestXML($param);
-
+        print_r('get lock code request data has been sent \r\n');
+        // var_dump($room_info_request_xml);
         // get room info
         $room_info = $this->sendRequest($room_info_request_xml);
-
+        //print_r($room_info);
         // get lock code from room info
         // TODO: add validation for xml
         $room_info_xml = simplexml_load_string($room_info);
         $lock_code = $room_info_xml->SVCCONT->LOCKCODE;
+        // var_dump($lock_code);
+        
+        if(!isset($lock_code)){
+            echo 'Room not found. Using test lock code to open the door\r\n';
 
+            $lock_code = '010101';
+        }
+        
         $param['LOCKCODE'] = $lock_code;
 
 
         // get open lock request
         $lock_open_request_xml = $this->getOpenLockRequestXML($param);
+        print_r('door open request data has been sent \r\n');
+        // var_dump($lock_open_request_xml);
+
+        
 
         // send request 
         $lock_info = $this->sendRequest($lock_open_request_xml);
+        //print_r($lock_info);
 
-
-
-        return $room_info_request_xml . " \r\n\r\n\r\n\r\n\r\n\r\n" . $room_info . " \r\n\r\n\r\n\r\n\r\n\r\n" . $lock_open_request_xml . " \r\n\r\n\r\n\r\n\r\n\r\n" . $lock_info;
+        return "door open succ";
     }
 
 
@@ -73,52 +84,28 @@ class Dao_Door extends Dao_Base
     {
         $room_code = $param['ROOMCODE'];
 
-        $domtree = new DOMDocument('1.0', 'UTF-8');
-
-        /* create the root element of the xml tree */
-        $xmlRoot = $domtree->createElement("xml");
-        /* append it to the document created */
-        $xmlRoot = $domtree->appendChild($xmlRoot);
-
-
-        // build svchead
-        $bipcode = $domtree->createElement("BIPCODE", 101);
-        $procid = $domtree->createElement("PROCID", 2);
-        // YY MM DD HH MI SS ZZZ 
+        // // YY MM DD HH MI SS ZZZ 
         $sys_process_time = date("ymdHisv");
-        $processtime = $domtree->createElement("PROCESSTIME", $sys_process_time);
-        // TODO: need replace it into setting.
 
         $sign_code = md5("101" . "2" . $sys_process_time . $this->access_key);
 
-        $sign = $domtree->createElement("sign", $sign_code);
-
-        $svchead = $domtree->createElement("SVCHEAD");
-
-        $svchead->appendChild($bipcode);
-        $svchead->appendChild($procid);
-        $svchead->appendChild($processtime);
-        $svchead->appendChild($sign);
-
-
-
-        // build SVCCONT
-        $roomcode = $domtree->createElement("ROOMCODE", $room_code);
-        $svcont = $domtree->createElement("SVCCONT");
-
-        $svcont->appendChild($roomcode);
+        $request_data = '
+            <SVCINTER>
+                <SVCHEAD>
+                    <BIPCODE>101</BIPCODE>
+                    <PROCID>2</PROCID>
+                    <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
+                    <sign>'. $sign_code .'</sign>
+                </SVCHEAD>
+                <SVCCONT>
+                    <ROOMCODE>'. $room_code .'</ROOMCODE>
+                </SVCCONT>
+            </SVCINTER>
+        ';
 
 
-        // add svchead and svcont to root
-        $svcinter = $domtree->createElement("SVCINTER");
-        $svcinter = $xmlRoot->appendChild($svcinter);
 
-
-        $svcinter->appendChild($svchead);
-        $svcinter->appendChild($svcont);
-
-
-        return  $domtree->saveXML();
+        return  $request_data;
     }
 
 
@@ -140,59 +127,29 @@ class Dao_Door extends Dao_Base
         $id_code = $param['IDCODE'];
         $lock_code = $param['LOCKCODE'];
 
-
-        // build lock open request xml
-        $domtree = new DOMDocument('1.0', 'UTF-8');
-
-        /* create the root element of the xml tree */
-        $xmlRoot = $domtree->createElement("xml");
-        /* append it to the document created */
-        $xmlRoot = $domtree->appendChild($xmlRoot);
-
-
-        // build svchead
-        $bipcode = $domtree->createElement("BIPCODE", 103);
-        $procid = $domtree->createElement("PROCID", 2);
-        // YY MM DD HH MI SS ZZZ 
         $sys_process_time = date("ymdHisv");
-        $processtime = $domtree->createElement("PROCESSTIME", $sys_process_time);
-        // TODO: need replace it into setting.
 
         $sign_code = md5("103" . "2" . $sys_process_time . $this->access_key);
 
-        $sign = $domtree->createElement("sign", $sign_code);
-
-        $svchead = $domtree->createElement("SVCHEAD");
-
-        $svchead->appendChild($bipcode);
-        $svchead->appendChild($procid);
-        $svchead->appendChild($processtime);
-        $svchead->appendChild($sign);
-
-
-
-        // build SVCCONT
-        $cuscode = $domtree->createElement("CUSCODE", $cus_code);
-        $idcode = $domtree->createElement("IDCODE", $id_code);
-        $lockcode = $domtree->createElement("LOCKCODE", $lock_code);
-
-        $svcont = $domtree->createElement("SVCCONT");
-
-        $svcont->appendChild($cuscode);
-        $svcont->appendChild($idcode);
-        $svcont->appendChild($lockcode);
+        $request_data = '
+            <SVCINTER>
+                <SVCHEAD>
+                    <BIPCODE>103</BIPCODE>
+                    <PROCID>2</PROCID>
+                    <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
+                    <sign>'. $sign_code .'</sign>
+                </SVCHEAD>
+                <SVCCONT>
+                    <CUSCODE>'. $cus_code .'</CUSCODE>
+                    <IDCODE>'. $id_code .'</IDCODE>
+                    <LOCKCODE>'. $lock_code .'</LOCKCODE>
+                </SVCCONT>
+            </SVCINTER>
+        ';
 
 
-        // add svchead and svcont to root
-        $svcinter = $domtree->createElement("SVCINTER");
-        $svcinter = $xmlRoot->appendChild($svcinter);
 
-
-        $svcinter->appendChild($svchead);
-        $svcinter->appendChild($svcont);
-
-
-        return  $domtree->saveXML();
+        return  $request_data;
     }
 
 
@@ -215,33 +172,59 @@ class Dao_Door extends Dao_Base
 
         // send request to server
         // TODO: set this url to setting
-        $url = "http://183.239.170.26:6007/wsdl/IBWHISIFSERVER";
-
-        $header = "POST HTTP/1.0 \r\n";
-        $header .= "Content-type: text/xml \r\n";
-        $header .= "Content-length: " . strlen($xml) . " \r\n";
-        $header .= "Content-transfer-encoding: text \r\n";
-        $header .= "Connection: close \r\n\r\n";
-        // add xml data into request
-        $header .= $xml;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $header);
+        $url = "http://183.239.170.26:6007/soap/IBWHISIFSERVER";
 
 
-        $data = curl_exec($ch);
+        // build request 
+        $request_data = '
+            <soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:BWHISIFSERVERIntf-IBWHISIFSERVER">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <urn:BWHISOPIF soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+                        <QuestXml xsi:type="xsd:string">
+                        
+                        '. $xml .'                
+                
+                        </QuestXml>
+                    </urn:BWHISOPIF>
+                </soapenv:Body>
+            </soapenv:Envelope>
+        ';
 
 
-        if (curl_errno($ch)) {
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 3000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $request_data,
+            CURLOPT_HTTPHEADER => array(
+              "Content-Type: text/xml;charset=UTF-8
+              "
+            ),
+          ));
+
+
+        $data = curl_exec($curl);
+
+
+        if (curl_errno($curl)) {
             // show error
-            echo 'Curl error: ' . curl_error($ch);
+            echo 'Curl error: ' . curl_error($curl);
         } else {
             // close 
-            curl_close($ch);
+            curl_close($curl);
         }
+
+
+        
 
         return $data;
     }

@@ -22,9 +22,9 @@ class DoorController extends \BaseController
 
     /**
      * 开门
-     *            ROOMCODE  房间名称（门锁管理软件中房间名称） 
-     *            CUSCODE   账号或卡号 
-     *            IDCODE    信息登记时证件号码 
+     *            ROOMCODE  房间名称（门锁管理软件中房间名称） 101
+     *            CUSCODE   账号或卡号                       BAC37B30
+     *            IDCODE    信息登记时证件号码                2345
      * @return Json
      */
     public function openDoorAction()
