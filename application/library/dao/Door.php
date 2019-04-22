@@ -48,20 +48,22 @@ class Dao_Door extends Dao_Base
         $room_info_request_xml = $this->getRoomInfoRequestXML($param);
         // get room info
         $room_info = $this->sendRequest($room_info_request_xml);
-        
+
 
         // get lock code from room info
         // TODO: add validation for xml
-        $room_info_xml = simplexml_load_string($room_info);        
+        $room_info_xml = simplexml_load_string($room_info);
         $lock_code = $room_info_xml->SVCHEAD->ROOMLIST;
 
-        if(!isset($lock_code)){
-            //print_r('<br />');
-            //print_r ('Room not found. Using test lock code to open the door <br />');
+        // print_r($lock_code);
 
-            $lock_code = '010101';
-        }
-        
+
+        //if (!isset($lock_code)) {
+        //print_r('<br />');
+
+        $lock_code = '010101';
+        // }
+
 
         $lock_code = '010101';
 
@@ -78,7 +80,7 @@ class Dao_Door extends Dao_Base
         $lock_open_request_xml = $this->getOpenLockRequestXML($param);
 
         // send request 
-        $lock_info = $this->sendRequest($lock_open_request_xml);       
+        $lock_info = $this->sendRequest($lock_open_request_xml);
 
         // print_r('open lock response data <br />');
         // var_dump($lock_info);
@@ -119,7 +121,7 @@ class Dao_Door extends Dao_Base
         $lock_status_code = $lock_status_xml->SVCCONT->RESPCODE;
 
 
-        return $value . ' lock ('. $lock_code .') status code = ' . $lock_status_code;
+        return $value . '. Lock (' . $lock_code . ') status code = ' . $lock_status_code;
     }
 
 
@@ -148,10 +150,10 @@ class Dao_Door extends Dao_Base
                     <BIPCODE>101</BIPCODE>
                     <PROCID>2</PROCID>
                     <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
-                    <sign>'. $sign_code .'</sign>
+                    <sign>' . $sign_code . '</sign>
                 </SVCHEAD>
                 <SVCCONT>
-                    <ROOMCODE>'. $room_code .'</ROOMCODE>
+                    <ROOMCODE>' . $room_code . '</ROOMCODE>
                 </SVCCONT>
             </SVCINTER>
         ';
@@ -190,12 +192,12 @@ class Dao_Door extends Dao_Base
                     <BIPCODE>103</BIPCODE>
                     <PROCID>2</PROCID>
                     <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
-                    <sign>'. $sign_code .'</sign>
+                    <sign>' . $sign_code . '</sign>
                 </SVCHEAD>
                 <SVCCONT>
-                    <CUSCODE>'. $cus_code .'</CUSCODE>
-                    <IDCODE>'. $id_code .'</IDCODE>
-                    <LOCKCODE>'. $lock_code .'</LOCKCODE>
+                    <CUSCODE>' . $cus_code . '</CUSCODE>
+                    <IDCODE>' . $id_code . '</IDCODE>
+                    <LOCKCODE>' . $lock_code . '</LOCKCODE>
                 </SVCCONT>
             </SVCINTER>
         ';
@@ -206,7 +208,7 @@ class Dao_Door extends Dao_Base
     }
 
 
-      /**
+    /**
      * 获取门锁状态XML
      *
      * @param
@@ -234,12 +236,12 @@ class Dao_Door extends Dao_Base
                     <BIPCODE>104</BIPCODE>
                     <PROCID>2</PROCID>
                     <PROCESSTIME>' . $sys_process_time . '</PROCESSTIME>
-                    <sign>'. $sign_code .'</sign>
+                    <sign>' . $sign_code . '</sign>
                 </SVCHEAD>
                 <SVCCONT>
-                    <CUSCODE>'. $cus_code .'</CUSCODE>
-                    <LOCKCODE>'. $lock_code .'</LOCKCODE>
-                    <SVRBTIME>'. $svrb_time .'</SVRBTIME>
+                    <CUSCODE>' . $cus_code . '</CUSCODE>
+                    <LOCKCODE>' . $lock_code . '</LOCKCODE>
+                    <SVRBTIME>' . $svrb_time . '</SVRBTIME>
                 </SVCCONT>
             </SVCINTER>
         ';
@@ -269,11 +271,11 @@ class Dao_Door extends Dao_Base
         $client = new SoapClient("http://183.239.170.26:6007/wsdl/IBWHISIFSERVER");
 
 
-        $result = $client->__soapCall("BWHISOPIF", array( 
+        $result = $client->__soapCall("BWHISOPIF", array(
             "QuestXml" => $xml
-        )); 
+        ));
 
-        
+
 
         return $result;
     }
