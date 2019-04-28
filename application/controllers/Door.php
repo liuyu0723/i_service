@@ -36,7 +36,7 @@ class DoorController extends \BaseController
         $param['IDCODE'] = intval($this->getParamList('IDCODE'));
 
         $data = $this->model->openDoor($param);
-        
-        print_r($data);
+
+        $this->echoSuccessData($data);
     }
 }

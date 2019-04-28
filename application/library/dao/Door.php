@@ -120,8 +120,10 @@ class Dao_Door extends Dao_Base
         $lock_status_xml = simplexml_load_string($lock_status);
         $lock_status_code = $lock_status_xml->SVCCONT->RESPCODE;
 
-
-        return $value . '. Lock (' . $lock_code . ') status code = ' . $lock_status_code;
+        return array(
+            'LockCode' => $lock_code,
+            'LockStatusCode' => $lock_status_code . ''
+        );
     }
 
 
