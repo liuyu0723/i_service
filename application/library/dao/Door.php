@@ -49,6 +49,12 @@ class Dao_Door extends Dao_Base
         // get room info
         $room_info = $this->sendRequest($room_info_request_xml);
 
+        if ($room_info == '') {
+            return array(
+                'LockCode' => 'remote server error',
+                'LockStatusCode' => '999'
+            );
+        }
 
         // get lock code from room info
         // TODO: add validation for xml
@@ -82,6 +88,15 @@ class Dao_Door extends Dao_Base
         // send request 
         $lock_info = $this->sendRequest($lock_open_request_xml);
 
+
+
+        if ($lock_info == '') {
+            return array(
+                'LockCode' => 'remote server error',
+                'LockStatusCode' => '999'
+            );
+        }
+
         // print_r('open lock response data <br />');
         // var_dump($lock_info);
         // print_r('<br />');
@@ -113,6 +128,14 @@ class Dao_Door extends Dao_Base
 
         // send request 
         $lock_status = $this->sendRequest($lock_status_request_xml);
+
+        if ($lock_status == '') {
+            return array(
+                'LockCode' => 'remote server error',
+                'LockStatusCode' => '999'
+            );
+        }
+
         // print_r('lock status response data <br />');
         // var_dump($lock_status);
         // print_r('<br />');
@@ -268,14 +291,20 @@ class Dao_Door extends Dao_Base
     private function sendRequest($xml): string
     {
 
-        // send request to server
-        // TODO: set this url to setting
-        $client = new SoapClient("http://183.239.170.26:6007/wsdl/IBWHISIFSERVER");
+        $result = "";
+
+        try {
+            // send request to server
+            // TODO: set this url to setting
+            $client = new SoapClient("http://183.239.170.26:6007/wsdl/IBWHISIFSERVER");
 
 
-        $result = $client->__soapCall("BWHISOPIF", array(
-            "QuestXml" => $xml
-        ));
+            $result = $client->__soapCall("BWHISOPIF", array(
+                "QuestXml" => $xml
+            ));
+        } catch (Exception $e) {
+            $result = "";
+        }
 
 
 
