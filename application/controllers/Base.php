@@ -175,4 +175,11 @@ abstract class BaseController extends \Yaf_Controller_Abstract
 		header('Location:/error/notfound');
 		exit();
 	}
+
+
+	function validateDate($date, $format = 'Y-m-d H:i:s')
+	{
+		$d = DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) == $date;
+	}
 }

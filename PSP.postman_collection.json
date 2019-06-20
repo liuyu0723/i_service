@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "5f736afc-b04a-4e13-a271-ae57592e3130",
+		"name": "PSP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "reserve",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "adults",
+							"value": "2",
+							"description": "成人数",
+							"type": "text"
+						},
+						{
+							"key": "arrDate",
+							"value": "2019-06-01",
+							"description": "到店日期",
+							"type": "text"
+						},
+						{
+							"key": "depDate",
+							"value": "2019-06-10",
+							"description": "离店日期",
+							"type": "text"
+						},
+						{
+							"key": "booker",
+							"value": "book",
+							"description": "订房人名字",
+							"type": "text"
+						},
+						{
+							"key": "bookTel",
+							"value": "131313131313",
+							"description": "订房人电话",
+							"type": "text"
+						},
+						{
+							"key": "gstName",
+							"value": "gst",
+							"description": "客人名字",
+							"type": "text"
+						},
+						{
+							"key": "gstTel",
+							"value": "120120120120",
+							"description": "客人电话",
+							"type": "text"
+						},
+						{
+							"key": "hotelId",
+							"value": "3140",
+							"description": "酒店ID",
+							"type": "text"
+						},
+						{
+							"key": "rateCode",
+							"value": "WXJ",
+							"description": "房价代码 从 hotelRoomDetails获取",
+							"type": "text"
+						},
+						{
+							"key": "rmType",
+							"value": "BDR",
+							"description": "房型代码 从 hotelRoomDetails获取",
+							"type": "text"
+						},
+						{
+							"key": "source",
+							"value": "GD",
+							"description": "客人来源",
+							"type": "text"
+						},
+						{
+							"key": "market",
+							"value": "10",
+							"description": "市场类别",
+							"type": "text"
+						},
+						{
+							"key": "rmQty",
+							"value": "1",
+							"description": "房间数量",
+							"type": "text"
+						},
+						{
+							"key": "rmRate",
+							"value": "544.02",
+							"description": "房间单价 从 hotelRoomDetails获取",
+							"type": "text"
+						},
+						{
+							"key": "channel",
+							"value": "WEDCT",
+							"description": "渠道代码   MSD 马上订, WEDCT 微信",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://devservice.easyiservice.com/Hotel/reserve",
+					"protocol": "http",
+					"host": [
+						"devservice",
+						"easyiservice",
+						"com"
+					],
+					"path": [
+						"Hotel",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "roomDetail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://devservice.easyiservice.com/Hotel/roomDetail?hotelId=3140",
+					"protocol": "http",
+					"host": [
+						"devservice",
+						"easyiservice",
+						"com"
+					],
+					"path": [
+						"Hotel",
+						"roomDetail"
+					],
+					"query": [
+						{
+							"key": "hotelId",
+							"value": "3140"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hotelRoomDetails",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://devservice.easyiservice.com/Hotel/hotelRoomDetails?hotelId=3140&startDate=2019-07-01&endDate=2019-07-05&hProductCode=WEDCT",
+					"protocol": "http",
+					"host": [
+						"devservice",
+						"easyiservice",
+						"com"
+					],
+					"path": [
+						"Hotel",
+						"hotelRoomDetails"
+					],
+					"query": [
+						{
+							"key": "hotelId",
+							"value": "3140"
+						},
+						{
+							"key": "startDate",
+							"value": "2019-07-01"
+						},
+						{
+							"key": "endDate",
+							"value": "2019-07-05"
+						},
+						{
+							"key": "hProductCode",
+							"value": "WEDCT",
+							"description": "产品代码  WEDCT 微信"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

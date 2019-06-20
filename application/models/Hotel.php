@@ -33,4 +33,9 @@ class HotelModel extends \BaseModel
     {
         return $this->dao->getRoomPriceDetails($param);
     }
+
+    public function roomReserve(array $param)
+    {
+        return $this->dao->roomReserve($param);
+    }
 }

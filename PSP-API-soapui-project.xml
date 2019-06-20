@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="0abc7c1b-438c-4ffe-923b-6fce8051e0d6" activeEnvironment="Default" name="PSP" resourceRoot="" soapui-version="5.5.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="b7ba4c20-aa22-4e9e-8d46-4b657123a0db" wsaVersion="NONE" name="CrsServiceHttpBinding" type="wsdl" bindingName="{http://xfire.super8.com/CrsService}CrsServiceHttpBinding" soapVersion="1_1" anonymous="optional" definition="http://219.137.213.98:37100/psp/services/CrsService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://219.137.213.98:37100/psp/services/CrsService?wsdl"><con:part><con:url>http://219.137.213.98:37100/psp/services/CrsService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://xfire.super8.com/CrsService" xmlns:ns2="http://webservice.crs.business.ipegasus.armitage.com" xmlns:ns1="http://webservice.system.business.ipegasus.armitage.com" xmlns:ns4="http://foreign.ipegasus.armitage.com" xmlns:ns3="http://webservice.guest.business.ipegasus.armitage.com" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://xfire.super8.com/CrsService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+<con:soapui-project id="0abc7c1b-438c-4ffe-923b-6fce8051e0d6" activeEnvironment="Default" name="PSP" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="b7ba4c20-aa22-4e9e-8d46-4b657123a0db" wsaVersion="NONE" name="CrsServiceHttpBinding" type="wsdl" bindingName="{http://xfire.super8.com/CrsService}CrsServiceHttpBinding" soapVersion="1_1" anonymous="optional" definition="http://219.137.213.98:37100/psp/services/CrsService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://219.137.213.98:37100/psp/services/CrsService?wsdl"><con:part><con:url>http://219.137.213.98:37100/psp/services/CrsService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://xfire.super8.com/CrsService" xmlns:ns2="http://webservice.crs.business.ipegasus.armitage.com" xmlns:ns1="http://webservice.system.business.ipegasus.armitage.com" xmlns:ns4="http://foreign.ipegasus.armitage.com" xmlns:ns3="http://webservice.guest.business.ipegasus.armitage.com" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://xfire.super8.com/CrsService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
   <wsdl:types>
     <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xfire.super8.com/CrsService">
       <xsd:element name="getOrderByAccidEmail">
@@ -3046,185 +3046,40 @@
          </crs:in0>\r
       </crs:addfavorite>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/addfavoriteRequest"/></con:call></con:operation><con:operation id="ea543b4e-ff30-4e3b-b140-fc97c599c050" isOneWay="false" action="" name="addOrder" bindingOperationName="addOrder" type="Request-Response" outputName="addOrderResponse" inputName="addOrderRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="697869d5-ebdd-4670-8fb7-b4a9e77b4ee2" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService" xmlns:web="http://webservice.system.business.ipegasus.armitage.com" xmlns:web1="http://webservice.crs.business.ipegasus.armitage.com">\r
-   <soapenv:Header/>\r
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/addfavoriteRequest"/></con:call></con:operation><con:operation id="ea543b4e-ff30-4e3b-b140-fc97c599c050" isOneWay="false" action="" name="addOrder" bindingOperationName="addOrder" type="Request-Response" outputName="addOrderResponse" inputName="addOrderRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="51f58f24-e3cc-4fa5-9314-d09975b76f9b" name="AddOrder"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService" xmlns:web="http://webservice.system.business.ipegasus.armitage.com" xmlns:web1="http://webservice.crs.business.ipegasus.armitage.com">\r
+   <soapenv:Header>
+      <AuthenticationToken>
+         <Username>pegasus2</Username>
+         <Password>pegasus2pw</Password>
+      </AuthenticationToken>
+      </soapenv:Header>
    <soapenv:Body>\r
       <crs:addOrder>\r
          <crs:in0>\r
-            <!--Optional:-->\r
-            <web:accId>?</web:accId>\r
-            <!--Optional:-->\r
-            <web:adults>?</web:adults>\r
-            <!--Optional:-->\r
-            <web:arrDate>?</web:arrDate>\r
-            <!--Optional:-->\r
-            <web:arrDateTime>?</web:arrDateTime>\r
-            <!--Optional:-->\r
-            <web:bookTel>?</web:bookTel>\r
-            <!--Optional:-->\r
-            <web:booker>?</web:booker>\r
-            <!--Optional:-->\r
-            <web:cardNo>?</web:cardNo>\r
-            <!--Optional:-->\r
-            <web:channel>?</web:channel>\r
-            <!--Optional:-->\r
-            <web:children>?</web:children>\r
-            <!--Optional:-->\r
-            <web:connectcustid>?</web:connectcustid>\r
-            <!--Optional:-->\r
-            <web:contractCode>?</web:contractCode>\r
-            <!--Optional:-->\r
-            <web:contractId>?</web:contractId>\r
-            <!--Optional:-->\r
-            <web:ctrName>?</web:ctrName>\r
-            <!--Optional:-->\r
-            <web:custId>?</web:custId>\r
-            <!--Optional:-->\r
-            <web:custName>?</web:custName>\r
-            <!--Optional:-->\r
-            <web:depDate>?</web:depDate>\r
-            <!--Optional:-->\r
-            <web:depDateTime>?</web:depDateTime>\r
-            <!--Optional:-->\r
-            <web:docNo>?</web:docNo>\r
-            <!--Optional:-->\r
-            <web:docType>?</web:docType>\r
-            <!--Optional:-->\r
-            <web:email>?</web:email>\r
-            <!--Optional:-->\r
-            <web:engName>?</web:engName>\r
-            <!--Optional:-->\r
-            <web:equipmentid>?</web:equipmentid>\r
-            <!--Optional:-->\r
-            <web:frtAccId>?</web:frtAccId>\r
-            <!--Optional:-->\r
-            <web:gender>?</web:gender>\r
-            <!--Optional:-->\r
-            <web:gresPackageDTO>\r
-               <!--Zero or more repetitions:-->\r
-               <web1:GresPackageDTO>\r
-                  <!--Optional:-->\r
-                  <web1:accid>?</web1:accid>\r
-                  <!--Optional:-->\r
-                  <web1:beginTime>?</web1:beginTime>\r
-                  <!--Optional:-->\r
-                  <web1:createSource>?</web1:createSource>\r
-                  <!--Optional:-->\r
-                  <web1:createTime>?</web1:createTime>\r
-                  <!--Optional:-->\r
-                  <web1:createUser>?</web1:createUser>\r
-                  <!--Optional:-->\r
-                  <web1:endTime>?</web1:endTime>\r
-                  <!--Optional:-->\r
-                  <web1:gpid>?</web1:gpid>\r
-                  <!--Optional:-->\r
-                  <web1:hotelid>?</web1:hotelid>\r
-                  <!--Optional:-->\r
-                  <web1:pgCansleQty>?</web1:pgCansleQty>\r
-                  <!--Optional:-->\r
-                  <web1:pgCode>?</web1:pgCode>\r
-                  <!--Optional:-->\r
-                  <web1:pgName>?</web1:pgName>\r
-                  <!--Optional:-->\r
-                  <web1:pgQty>?</web1:pgQty>\r
-                  <!--Optional:-->\r
-                  <web1:pgSource>?</web1:pgSource>\r
-                  <!--Optional:-->\r
-                  <web1:price>?</web1:price>\r
-                  <!--Optional:-->\r
-                  <web1:ratecode>?</web1:ratecode>\r
-                  <!--Optional:-->\r
-                  <web1:resid>?</web1:resid>\r
-                  <!--Optional:-->\r
-                  <web1:updateSource>?</web1:updateSource>\r
-                  <!--Optional:-->\r
-                  <web1:updateTime>?</web1:updateTime>\r
-                  <!--Optional:-->\r
-                  <web1:updateUser>?</web1:updateUser>\r
-               </web1:GresPackageDTO>\r
-            </web:gresPackageDTO>\r
-            <!--Optional:-->\r
-            <web:groupId>?</web:groupId>\r
-            <!--Optional:-->\r
-            <web:gstName>?</web:gstName>\r
-            <!--Optional:-->\r
-            <web:gstTel>?</web:gstTel>\r
-            <!--Optional:-->\r
-            <web:hotelCName>?</web:hotelCName>\r
-            <!--Optional:-->\r
-            <web:hotelEName>?</web:hotelEName>\r
-            <!--Optional:-->\r
-            <web:hotelId>?</web:hotelId>\r
-            <!--Optional:-->\r
-            <web:locale>?</web:locale>\r
-            <!--Optional:-->\r
-            <web:market>?</web:market>\r
-            <!--Optional:-->\r
-            <web:msgType>?</web:msgType>\r
-            <!--Optional:-->\r
-            <web:nights>?</web:nights>\r
-            <!--Optional:-->\r
-            <web:otherRefCode>?</web:otherRefCode>\r
-            <!--Optional:-->\r
-            <web:payStatus>?</web:payStatus>\r
-            <!--Optional:-->\r
-            <web:payType>?</web:payType>\r
-            <!--Optional:-->\r
-            <web:paymount>?</web:paymount>\r
-            <!--Optional:-->\r
-            <web:paytype>?</web:paytype>\r
-            <!--Optional:-->\r
-            <web:rateCode>?</web:rateCode>\r
-            <!--Optional:-->\r
-            <web:remarks>?</web:remarks>\r
-            <!--Optional:-->\r
-            <web:resClerk>?</web:resClerk>\r
-            <!--Optional:-->\r
-            <web:resDate>?</web:resDate>\r
-            <!--Optional:-->\r
-            <web:resId>?</web:resId>\r
-            <!--Optional:-->\r
-            <web:resMode>?</web:resMode>\r
-            <!--Optional:-->\r
-            <web:resType>?</web:resType>\r
-            <!--Optional:-->\r
-            <web:rmNo>?</web:rmNo>\r
-            <!--Optional:-->\r
-            <web:rmQty>?</web:rmQty>\r
-            <!--Optional:-->\r
-            <web:rmRate>?</web:rmRate>\r
-            <!--Optional:-->\r
-            <web:rmType>?</web:rmType>\r
-            <!--Optional:-->\r
-            <web:rmTypeAliasCn>?</web:rmTypeAliasCn>\r
-            <!--Optional:-->\r
-            <web:rmTypeAliasEn>?</web:rmTypeAliasEn>\r
-            <!--Optional:-->\r
-            <web:rmTypeCName>?</web:rmTypeCName>\r
-            <!--Optional:-->\r
-            <web:rmTypeEName>?</web:rmTypeEName>\r
-            <!--Optional:-->\r
-            <web:source>?</web:source>\r
-            <!--Optional:-->\r
-            <web:specials>?</web:specials>\r
-            <!--Optional:-->\r
-            <web:staffName>?</web:staffName>\r
-            <!--Optional:-->\r
-            <web:status>?</web:status>\r
-            <!--Optional:-->\r
-            <web:statusCName>?</web:statusCName>\r
-            <!--Optional:-->\r
-            <web:statusEName>?</web:statusEName>\r
-            <!--Optional:-->\r
-            <web:syncStatus>?</web:syncStatus>\r
-            <!--Optional:-->\r
-            <web:total>?</web:total>\r
-            <!--Optional:-->\r
-            <web:upmpPayAmount>?</web:upmpPayAmount>\r
+            <web:adults>2</web:adults>
+            <web:arrDate>2018-06-01</web:arrDate>
+            <web:depDate>2017-06-10</web:depDate>
+            <web:booker>booker</web:booker>
+            <web:bookTel>131313131313</web:bookTel>
+            <web:gstName>gstName</web:gstName>
+            <web:gstTel>130130130</web:gstTel>
+            <web:hotelId>3140</web:hotelId>
+            <web:rateCode>WXJ</web:rateCode>
+            <web:rmType>BDR</web:rmType>
+            <web:source>GD</web:source>
+            <web:market>10</web:market>
+            <web:AccType>A</web:AccType>
+            <web:resClerk>WEB</web:resClerk>
+            <web:rmQty>1</web:rmQty>
+            <web:rmRate>544.0</web:rmRate>
+            <web:nights>9</web:nights>
+            <web:status>W</web:status>
+            <web:msgType>10,20</web:msgType>
+            <web:channel>MSD</web:channel>
          </crs:in0>\r
       </crs:addOrder>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/addOrderRequest"/></con:call></con:operation><con:operation id="b3aa4dc8-2e08-44de-ab98-eb6bf54f28a4" isOneWay="false" action="" name="autoUpdatePriceInfoRecommend" bindingOperationName="autoUpdatePriceInfoRecommend" type="Request-Response" outputName="autoUpdatePriceInfoRecommendResponse" inputName="autoUpdatePriceInfoRecommendRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="707e6031-5595-40ee-b16f-b4cc6c77a12c" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/addOrderRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="b3aa4dc8-2e08-44de-ab98-eb6bf54f28a4" isOneWay="false" action="" name="autoUpdatePriceInfoRecommend" bindingOperationName="autoUpdatePriceInfoRecommend" type="Request-Response" outputName="autoUpdatePriceInfoRecommendResponse" inputName="autoUpdatePriceInfoRecommendRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="707e6031-5595-40ee-b16f-b4cc6c77a12c" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <crs:autoUpdatePriceInfoRecommend>\r
@@ -3270,14 +3125,7 @@
          <crs:in1>?</crs:in1>\r
       </crs:getChannelRoomType>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getChannelRoomTypeRequest"/></con:call></con:operation><con:operation id="df8c319b-d9a1-4ce4-be37-c4d855441ed2" isOneWay="false" action="" name="getDcPublic" bindingOperationName="getDcPublic" type="Request-Response" outputName="getDcPublicResponse" inputName="getDcPublicRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="90d80c54-ee9f-437c-8c3f-786bfa81e033" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
-   <soapenv:Header/>\r
-   <soapenv:Body>\r
-      <crs:getDcPublic>\r
-         <crs:in0>?</crs:in0>\r
-      </crs:getDcPublic>\r
-   </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getDcPublicRequest"/></con:call><con:call id="c7074c23-6e3e-41f5-b3b1-456bb980160c" name="GetPublicCode"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getChannelRoomTypeRequest"/></con:call></con:operation><con:operation id="df8c319b-d9a1-4ce4-be37-c4d855441ed2" isOneWay="false" action="" name="getDcPublic" bindingOperationName="getDcPublic" type="Request-Response" outputName="getDcPublicResponse" inputName="getDcPublicRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c7074c23-6e3e-41f5-b3b1-456bb980160c" name="GetPublicCode"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
   <soapenv:Header>
 	<AuthenticationToken>
 		<Username>pegasus2</Username>
@@ -3286,7 +3134,7 @@
    </soapenv:Header>
    <soapenv:Body>\r
       <crs:getDcPublic>\r
-         <crs:in0>?</crs:in0>\r
+         <crs:in0>resstat</crs:in0>\r
       </crs:getDcPublic>\r
    </soapenv:Body>\r
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getDcPublicRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="cf840448-7ef2-4c8f-9d6d-274eb860ddff" isOneWay="false" action="" name="getfavorite" bindingOperationName="getfavorite" type="Request-Response" outputName="getfavoriteResponse" inputName="getfavoriteRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="bbe0a1e2-8c3b-430d-ae8a-2f51cfb92ef6" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService" xmlns:for="http://foreign.ipegasus.armitage.com">\r
@@ -3370,7 +3218,7 @@
          <crs:in0>?</crs:in0>\r
       </crs:getGRESDetail>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getGRESDetailRequest"/></con:call></con:operation><con:operation id="f19f1dc7-a365-46fc-8b01-54fc68f62daf" isOneWay="false" action="" name="getHotelByBookingSuitHotelCode" bindingOperationName="getHotelByBookingSuitHotelCode" type="Request-Response" outputName="getHotelByBookingSuitHotelCodeResponse" inputName="getHotelByBookingSuitHotelCodeRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c8fd3031-b8ff-4c4f-bd0b-75a0341a4760" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/getGRESDetailRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="f19f1dc7-a365-46fc-8b01-54fc68f62daf" isOneWay="false" action="" name="getHotelByBookingSuitHotelCode" bindingOperationName="getHotelByBookingSuitHotelCode" type="Request-Response" outputName="getHotelByBookingSuitHotelCodeResponse" inputName="getHotelByBookingSuitHotelCodeRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c8fd3031-b8ff-4c4f-bd0b-75a0341a4760" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
       <crs:getHotelByBookingSuitHotelCode>\r
@@ -3859,18 +3707,7 @@
          <crs:in4>?</crs:in4>\r
       </crs:selectHotelRoomRateByhour>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRateByhourRequest"/></con:call></con:operation><con:operation id="a9b643a3-fb3e-4a75-be5e-71335b42f09d" isOneWay="false" action="" name="selectHotelRoomRates" bindingOperationName="selectHotelRoomRates" type="Request-Response" outputName="selectHotelRoomRatesResponse" inputName="selectHotelRoomRatesRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="4e54b058-e2c5-48a7-a6c8-b99093e9aac9" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
-   <soapenv:Header/>\r
-   <soapenv:Body>\r
-      <crs:selectHotelRoomRates>\r
-         <crs:in0>?</crs:in0>\r
-         <crs:in1>?</crs:in1>\r
-         <crs:in2>?</crs:in2>\r
-         <crs:in3>?</crs:in3>\r
-         <crs:in4>?</crs:in4>\r
-      </crs:selectHotelRoomRates>\r
-   </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRatesRequest"/></con:call><con:call id="a6a77cdd-0e58-40de-8ce1-37fc739fdea2" name="SelectHotelRoomRates"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRateByhourRequest"/></con:call></con:operation><con:operation id="a9b643a3-fb3e-4a75-be5e-71335b42f09d" isOneWay="false" action="" name="selectHotelRoomRates" bindingOperationName="selectHotelRoomRates" type="Request-Response" outputName="selectHotelRoomRatesResponse" inputName="selectHotelRoomRatesRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="a6a77cdd-0e58-40de-8ce1-37fc739fdea2" name="SelectHotelRoomRates"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
    <soapenv:Header>
 	<AuthenticationToken>
 		<Username>pegasus2</Username>
@@ -3910,22 +3747,22 @@
          <crs:in5>?</crs:in5>\r
       </crs:selectHotelRoomRates4CrmEX>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRates4CrmEXRequest"/></con:call></con:operation><con:operation id="69af350f-953e-477b-a943-6b88636f9cde" isOneWay="false" action="" name="selectHotelRoomRatesEX" bindingOperationName="selectHotelRoomRatesEX" type="Request-Response" outputName="selectHotelRoomRatesEXResponse" inputName="selectHotelRoomRatesEXRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c2173ba2-0a8c-4a14-a226-6bc42fa87180" name="SelectHotelRoomRates"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
-   <soapenv:Header>
-	<AuthenticationToken>
-		<Username>pegasus2</Username>
-		<Password>pegasus2pw</Password>
-	</AuthenticationToken>
-   </soapenv:Header>
-   <soapenv:Body>\r
-      <crs:selectHotelRoomRatesEX>\r
-         <crs:in0>3140</crs:in0>\r
-         <crs:in1>ALL</crs:in1>\r
-         <crs:in2>2019-08-10 10:30:00</crs:in2>\r
-         <crs:in3>2019-09-01 10:30:00</crs:in3>\r
-         <crs:in4>PGDCT</crs:in4>\r
-      </crs:selectHotelRoomRatesEX>\r
-   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRates4CrmEXRequest"/></con:call></con:operation><con:operation id="69af350f-953e-477b-a943-6b88636f9cde" isOneWay="false" action="" name="selectHotelRoomRatesEX" bindingOperationName="selectHotelRoomRatesEX" type="Request-Response" outputName="selectHotelRoomRatesEXResponse" inputName="selectHotelRoomRatesEXRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c2173ba2-0a8c-4a14-a226-6bc42fa87180" name="SelectHotelRoomRates"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">
+     <soapenv:Header>
+      <AuthenticationToken>
+         <Username>pegasus2</Username>
+         <Password>pegasus2pw</Password>
+      </AuthenticationToken>
+      </soapenv:Header>
+   <soapenv:Body>
+      <selectHotelRoomRatesEX>
+         <hotelId>3140</hotelId>
+         <rateCode>WXJ</rateCode>
+         <start>2019-06-10</start>
+         <end>2019-06-13</end>
+         <hproductCode>WEDCT</hproductCode>
+      </selectHotelRoomRatesEX>
+   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://xfire.super8.com/CrsService/CrsServicePortType/selectHotelRoomRatesEXRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d61834f1-31b1-4ebb-a1bf-47f9ad2b287d" isOneWay="false" action="" name="selectPKGInterface" bindingOperationName="selectPKGInterface" type="Request-Response" outputName="selectPKGInterfaceResponse" inputName="selectPKGInterfaceRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f2b3eeed-b728-4023-b994-e750983d8d5f" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://219.137.213.98:37100/psp/services/CrsService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:crs="http://xfire.super8.com/CrsService">\r
    <soapenv:Header/>\r
    <soapenv:Body>\r
