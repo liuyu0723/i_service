@@ -283,7 +283,7 @@ class StaffModel extends \BaseModel
 
 
     /**
-     * 员工登录
+     * app员工登录
      *
      * @param array $param
      * @return array
