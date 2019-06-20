@@ -1,10 +1,12 @@
 <?php
 use Frankli\Itearoa\Models\Staff;
+
 /**
  * 物业员工控制器类
  *
  */
-class StaffController extends \BaseController {
+class StaffController extends \BaseController
+{
 
     /**
      *
@@ -18,7 +20,8 @@ class StaffController extends \BaseController {
      */
     private $convertor;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->model = new StaffModel();
         $this->convertor = new Convertor_Staff();
@@ -29,7 +32,8 @@ class StaffController extends \BaseController {
      *
      * @return Json
      */
-    public function getStaffListAction() {
+    public function getStaffListAction()
+    {
         $param = array();
         $param['name'] = trim($this->getParamList('name'));
         $param['hotelid'] = intval($this->getParamList('hotelid'));
@@ -55,7 +59,8 @@ class StaffController extends \BaseController {
      *            int id 获取详情信息的id
      * @return Json
      */
-    public function getStaffDetailAction() {
+    public function getStaffDetailAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $data = $this->model->getStaffDetail($id);
@@ -69,7 +74,8 @@ class StaffController extends \BaseController {
     /**
      * Update staff's info
      */
-    public function updateStaffByIdAction() {
+    public function updateStaffByIdAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
@@ -95,7 +101,8 @@ class StaffController extends \BaseController {
      * 添加物业员工信息
      *
      */
-    public function addStaffAction() {
+    public function addStaffAction()
+    {
         $param = array();
         $param['lname'] = trim($this->getParamList('lname'));
         $param['staffid'] = intval($this->getParamList('staffid'));
@@ -123,19 +130,57 @@ class StaffController extends \BaseController {
      *            string identity 平台标识
      * @return Json
      */
-    public function loginAction() {
+    public function loginAction()
+    {
         $param = array();
-        $param ['lname'] = trim($this->getParamList('lname'));
-        $param ['pwd'] = trim($this->getParamList('pwd'));
-        $param ['hotelid'] = intval($this->getParamList('hotelid'));
-        $param ['groupid'] = intval($this->getParamList('groupid'));
-        $param ['platform'] = intval($this->getParamList('platform'));
-        $param ['identity'] = trim($this->getParamList('identity'));
-        $param ['isAd'] = intval($this->getParamList('ad'));
+        $param['lname'] = trim($this->getParamList('lname'));
+        $param['pwd'] = trim($this->getParamList('pwd'));
+        $param['hotelid'] = intval($this->getParamList('hotelid'));
+        $param['groupid'] = intval($this->getParamList('groupid'));
+        $param['platform'] = intval($this->getParamList('platform'));
+        $param['identity'] = trim($this->getParamList('identity'));
+        $param['isAd'] = intval($this->getParamList('ad'));
         $result = $this->model->login($param);
         $result = $this->convertor->userInfoConvertor($result);
         $this->echoSuccessData($result);
     }
+
+
+
+
+    /**
+     * app登录
+     *
+     * @param
+     *            string lname 员工登录帐号
+     * @param
+     *            string pwd 员工登录密码
+     * @param
+     *            int hotelid 物业ID
+     * @param
+     *            int groupid 集团ID
+     * @param
+     *            int platform 平台ID
+     * @param
+     *            string identity 平台标识
+     * @return Json
+     */
+    public function appLoginAction()
+    {
+        $param = array();
+        $param['lname'] = trim($this->getParamList('lname'));
+        $param['pwd'] = trim($this->getParamList('pwd'));
+        $param['hotelid'] = intval($this->getParamList('hotelid'));
+        $param['groupid'] = intval($this->getParamList('groupid'));
+        $param['platform'] = intval($this->getParamList('platform'));
+        $param['identity'] = trim($this->getParamList('identity'));
+        $param['isAd'] = intval($this->getParamList('ad'));
+        $result = $this->model->appLogin($param);
+        $result = $this->convertor->userInfoConvertor($result);
+        $this->echoSuccessData($result);
+    }
+
+
 
     /**
      * 根据Token获取员工信息
@@ -144,14 +189,15 @@ class StaffController extends \BaseController {
      *            string token
      * @return Json
      */
-    public function getStaffInfoByTokenAction() {
+    public function getStaffInfoByTokenAction()
+    {
         $token = trim($this->getParamList('token'));
         $userId = Auth_Login::getToken($token, 2);
-        if (empty ($userId)) {
+        if (empty($userId)) {
             $this->throwException(2, 'token验证失败');
         }
         $userInfo = $this->model->getStaffDetail($userId);
-        $userInfo ['token'] = $token;
+        $userInfo['token'] = $token;
         $result = $this->convertor->userInfoConvertor($userInfo);
         $this->echoSuccessData($result);
     }
@@ -173,7 +219,5 @@ class StaffController extends \BaseController {
      * todo extend staff table, store staff's language for msg push ESTSSLFMP
      */
     public function updateStaffLangAction()
-    {
-
-    }
+    { }
 }
