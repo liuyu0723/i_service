@@ -3,9 +3,11 @@
 /**
  * 员工管理数据层
  */
-class Dao_Staff extends Dao_Base {
+class Dao_Staff extends Dao_Base
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -15,15 +17,20 @@ class Dao_Staff extends Dao_Base {
      * @param array $param
      * @return array
      */
-    public function getStaffList(array $param): array {
+    public function getStaffList(array $param): array
+    {
         $limit = $param['limit'] ? intval($param['limit']) : 0;
         $page = $this->getStart($param['page'], $limit);
 
         $paramSql = $this->hundleParams($param);
 
-        $sql = "select hotel_staff.*, hotel_administrator.realname from hotel_staff LEFT JOIN hotel_administrator ON 
+        $sql = "select hotel_staff.*, hotel_administrator.realname
+                FROM hotel_staff 
+                LEFT JOIN hotel_administrator ON 
                 hotel_staff.admin_id = hotel_administrator.id
-                {$paramSql['sql']} ORDER BY staffid";
+                {$paramSql['sql']} 
+                ORDER BY hotel_staff.id DESC";
+
         if ($limit) {
             $sql .= " limit {$page},{$limit}";
         }
@@ -39,7 +46,7 @@ class Dao_Staff extends Dao_Base {
         return intval($result['count']);
     }
 
-    public function hundleParams(array $param) : array
+    public function hundleParams(array $param): array
     {
 
         $whereSql = array();
@@ -116,7 +123,8 @@ class Dao_Staff extends Dao_Base {
      *            int id
      * @return array
      */
-    public function getStaffDetail(int $id): array {
+    public function getStaffDetail(int $id): array
+    {
         $result = array();
 
         if ($id) {
@@ -136,7 +144,8 @@ class Dao_Staff extends Dao_Base {
      *            string staffId
      * @return array
      */
-    public function getStaffDetailByStaffId($staffId) {
+    public function getStaffDetailByStaffId($staffId)
+    {
         $result = array();
 
         if ($staffId) {
@@ -156,7 +165,8 @@ class Dao_Staff extends Dao_Base {
      * @param int $id
      * @return bool|number|string
      */
-    public function updateStaffById(array $info, int $id) {
+    public function updateStaffById(array $info, int $id)
+    {
         $result = false;
 
         if ($id) {
@@ -174,7 +184,8 @@ class Dao_Staff extends Dao_Base {
      *            array
      * @return int id
      */
-    public function addStaff(array $info) {
+    public function addStaff(array $info)
+    {
         $this->db->insert('hotel_staff', $info);
         return $this->db->lastInsertId();
     }

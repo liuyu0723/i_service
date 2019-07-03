@@ -156,6 +156,29 @@ class StaffModel extends \BaseModel
         return $this->dao->addStaff($info);
     }
 
+
+    /**
+     * Staff新增信息
+     *
+     * @param
+     *            array param 需要增加的信息
+     * @return int
+     */
+    public function addStaffWithHotelList($param)
+    {
+        $info['lname'] = $param['lname'];
+        $info['groupid'] = intval($param['groupid']);
+        $info['staffid'] = strval($param['staffid']);
+        $info['createtime'] = time();
+        $info['lastlogintime'] = time();
+        $info['lastloginip'] = Util_Tools::ipton(Util_Http::getIP());
+        $info['platform'] = intval($param['platform']);
+        $info['identity'] = $param['identity'];
+        $info['admin_id'] = intval($param['admin_id']);
+        $info['hotel_list'] = $param['hotel_list'];
+        return $this->dao->addStaff($info);
+    }
+
     /**
      * 获取用StaffId信息，跟gsm接口交互
      *
@@ -284,7 +307,13 @@ class StaffModel extends \BaseModel
 
     /**
      * app员工登录
-     *
+     * 
+     * 1. 添加一个新hotel到hotel_list
+     * ID = 99，
+     * GroupId = 调用appLogin时发送的GroupId
+     * Name = 新员工登录
+     * 2. 调用appLogin登录
+     * 登录时酒店必须选择 '新员工登录酒店'
      * @param array $param
      * @return array
      */
@@ -295,6 +324,10 @@ class StaffModel extends \BaseModel
         }
         if (empty($param['groupid'])) {
             $this->throwException('缺少集团参数', 3);
+        }
+
+        if (empty($param['hotelid'])) {
+            $this->throwException('缺少酒店参数', 3);
         }
 
         // 获取Oid
@@ -308,15 +341,33 @@ class StaffModel extends \BaseModel
         $getStaffInfo = $this->getStaffDetailByStaffId($staffIdInfo['staffId']);
         $userId = $getStaffInfo['id'];
         if (empty($userId)) {
-            //$this->throwException('员工未配置，请联系管理员添加', 5);
-            // 如果该员工不iservice数据库内，只返回GSM 员工ID
-            $userInfo = array(
-                'token' => '',
-                'permission' => '员工未配置，请联系管理员添加',
-                'staffid' => $_gsmStaffId
-            );
 
-            return $userInfo;
+            if (intval($param['hotelid']) != 99) {
+                $this->throwException('员工无对应物业权限，请选择有权限的物业', 5);
+            }
+
+            if ($_gsmStaffId > 0) {
+                //1. 添加 staff 到iservice数据库
+                $paramsForAddStaff = array(
+                    'lname' => $param['lname'],
+                    'groupid' => $param['groupid'],
+                    'staffid' => $_gsmStaffId,
+                    'platform' => 1,
+                    'identity' => self::STAFF_WEB_IDENTIFY,
+                    'admin_id' => 0,
+                    'hotel_list' => '99'  //员工临时登录物业
+                );
+                //1.1. 添加 staff 到iservice数据库
+                $newStaffId = $this->addStaffWithHotelList($paramsForAddStaff);
+                //2. 检查 add staff 返回值
+                if ($newStaffId <= 0) {
+                    $this->throwException('添加新员工失败, 请重试', 5);
+                }
+                //3. 从新调用 app login 服务
+                else {
+                    return $this->appLogin($param);
+                }
+            }
         } else {
             $hotelList = explode(",", $getStaffInfo['hotel_list']);
             if (!empty($param['hotelid']) && !in_array($param['hotelid'], $hotelList)) {
