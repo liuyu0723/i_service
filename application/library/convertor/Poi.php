@@ -21,11 +21,11 @@ class Convertor_Poi extends Convertor_Base {
         foreach ($poiList as $pois) {
             $poiTemp = array();
             $poiTemp ['id'] = $pois ['id'];
-            $poiTemp ['name'] = $this->handlerMultiLang('name', $pois);
-            $poiTemp ['address'] = $this->handlerMultiLang('address', $pois);
+            $poiTemp ['name'] = $this->handlerMultiLang('name', $pois, true);
+            $poiTemp ['address'] = $this->handlerMultiLang('address', $pois, true);
             $poiTemp ['tel'] = $pois ['tel'];
-            $poiTemp ['introduct'] = $this->handlerMultiLang('introduct', $pois);
-            $poiTemp ['detail'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('detail', $pois));
+            $poiTemp ['introduct'] = $this->handlerMultiLang('introduct', $pois, true);
+            $poiTemp ['detail'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('detail', $pois, true));
             $poiTemp ['pdf'] = $pois['pdf'] ? Enum_Img::getPathByKeyAndType($pois['pdf']) : '';
             $poiTemp ['video'] = $pois['video'] ? Enum_Img::getPathByKeyAndType($pois['video']) : '';
             $poiTemp ['pic'] = $pois['pic'] ? Enum_Img::getPathByKeyAndType($pois['pic'], Enum_Img::PIC_TYPE_KEY_WIDTH750) : '';
