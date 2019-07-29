@@ -114,7 +114,7 @@ class StaffModel extends \BaseModel
             $param['identity'] ? $info['identity'] = $param['identity'] : false;
             $param['staff_web_hotel_id'] ? $info['staff_web_hotel_id'] = intval($param['staff_web_hotel_id']) : false;
             $param['admin_id'] ? $info['admin_id'] = intval($param['admin_id']) : false;
-            $param['hotel_list'] ? $info['hotel_list'] = trim($param['hotel_list']) : false;
+            $param['hotel_list'] ? $info['hotel_list'] = str_replace(',99', '', str_replace('99,', '', trim($param['hotel_list']))) : false;
             if (!is_null($param['schedule'])) {
                 $info['schedule'] = trim($param['schedule']);
                 unset($info['lastlogintime']);
@@ -130,6 +130,10 @@ class StaffModel extends \BaseModel
                 unset($info['lastlogintime']);
                 unset($info['lastloginip']);
             }
+
+
+
+
             $result = $this->dao->updateStaffById($info, $id);
         }
         return $result;
