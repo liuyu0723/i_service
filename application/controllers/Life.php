@@ -4,7 +4,8 @@
  * 雅士阁生活控制器类
  *
  */
-class LifeController extends \BaseController {
+class LifeController extends \BaseController
+{
 
     /**
      * @var LifeModel
@@ -16,10 +17,11 @@ class LifeController extends \BaseController {
      */
     private $convertor;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        $this->model = new LifeModel ();
-        $this->convertor = new Convertor_Life ();
+        $this->model = new LifeModel();
+        $this->convertor = new Convertor_Life();
     }
 
     /**
@@ -27,20 +29,25 @@ class LifeController extends \BaseController {
      *
      * @return Json
      */
-    public function getLifeListAction() {
+    public function getLifeListAction()
+    {
         $param = array();
-        $param ['typeid'] = intval($this->getParamList('typeid'));
-        $param ['hotelid'] = intval($this->getParamList('hotelid'));
-        $param ['name'] = $this->getParamList('name');
+        $param['typeid'] = intval($this->getParamList('typeid'));
+        $param['hotelid'] = intval($this->getParamList('hotelid'));
+        $param['name'] = $this->getParamList('name');
         if (Enum_System::notAdminPackage($this->package)) {
-            $param ['status'] = 1;
+            $param['status'] = 1;
         } else {
-            $param ['status'] = $this->getParamList('status');
+            $param['status'] = $this->getParamList('status');
         }
-        $param ['status'] = $this->getParamList('status');
-        $param ['id'] = intval($this->getParamList('id'));
+
+        if (is_null($param['status'])) {
+            $param['status'] = 1;
+        }
+
+        $param['id'] = intval($this->getParamList('id'));
         $this->getPageParam($param);
-        if (empty ($param ['hotelid'])) {
+        if (empty($param['hotelid'])) {
             $this->throwException(2, '入参错误');
         }
         $lifeList = $this->model->getLifeList($param);
@@ -48,7 +55,7 @@ class LifeController extends \BaseController {
         if (Enum_System::notAdminPackage($this->package)) {
             $data = $this->convertor->getLifeListConvertor($lifeList, $lifeCount, $param);
         } else {
-            $lifeTypeModel = new LifeTypeModel ();
+            $lifeTypeModel = new LifeTypeModel();
             $typeList = $lifeTypeModel->getLifeTypeList($param);
             $data = $this->convertor->getAdminLifeListConvertor($lifeList, $lifeCount, $param, $typeList);
         }
@@ -62,7 +69,8 @@ class LifeController extends \BaseController {
      *            int id 获取详情信息的id
      * @return Json
      */
-    public function getLifeDetailAction() {
+    public function getLifeDetailAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $data = $this->model->getLifeDetail($id);
@@ -82,33 +90,34 @@ class LifeController extends \BaseController {
      *            array param 需要更新的字段
      * @return Json
      */
-    public function updateLifeByIdAction() {
+    public function updateLifeByIdAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
-            $param ['hotelid'] = $this->getParamList('hotelid');
-            $param ['typeid'] = $this->getParamList('typeid');
-            $param ['name_lang1'] = $this->getParamList('name_lang1');
-            $param ['name_lang2'] = $this->getParamList('name_lang2');
-            $param ['name_lang3'] = $this->getParamList('name_lang3');
-            $param ['detail_lang1'] = $this->getParamList('detail_lang1');
-            $param ['detail_lang2'] = $this->getParamList('detail_lang2');
-            $param ['detail_lang3'] = $this->getParamList('detail_lang3');
-            $param ['address_lang1'] = $this->getParamList('address_lang1');
-            $param ['address_lang2'] = $this->getParamList('address_lang2');
-            $param ['address_lang3'] = $this->getParamList('address_lang3');
-            $param ['introduct_lang1'] = $this->getParamList('introduct_lang1');
-            $param ['introduct_lang2'] = $this->getParamList('introduct_lang2');
-            $param ['introduct_lang3'] = $this->getParamList('introduct_lang3');
-            $param ['tel'] = $this->getParamList('tel');
-            $param ['lat'] = $this->getParamList('lat');
-            $param ['lng'] = $this->getParamList('lng');
-            $param ['sort'] = $this->getParamList('sort');
-            $param ['pdf'] = $this->getParamList('pdf');
-            $param ['video'] = $this->getParamList('video');
-            $param ['pic'] = $this->getParamList('pic');
-            $param ['updatetime'] = time();
-            $param ['status'] = $this->getParamList('status');
+            $param['hotelid'] = $this->getParamList('hotelid');
+            $param['typeid'] = $this->getParamList('typeid');
+            $param['name_lang1'] = $this->getParamList('name_lang1');
+            $param['name_lang2'] = $this->getParamList('name_lang2');
+            $param['name_lang3'] = $this->getParamList('name_lang3');
+            $param['detail_lang1'] = $this->getParamList('detail_lang1');
+            $param['detail_lang2'] = $this->getParamList('detail_lang2');
+            $param['detail_lang3'] = $this->getParamList('detail_lang3');
+            $param['address_lang1'] = $this->getParamList('address_lang1');
+            $param['address_lang2'] = $this->getParamList('address_lang2');
+            $param['address_lang3'] = $this->getParamList('address_lang3');
+            $param['introduct_lang1'] = $this->getParamList('introduct_lang1');
+            $param['introduct_lang2'] = $this->getParamList('introduct_lang2');
+            $param['introduct_lang3'] = $this->getParamList('introduct_lang3');
+            $param['tel'] = $this->getParamList('tel');
+            $param['lat'] = $this->getParamList('lat');
+            $param['lng'] = $this->getParamList('lng');
+            $param['sort'] = $this->getParamList('sort');
+            $param['pdf'] = $this->getParamList('pdf');
+            $param['video'] = $this->getParamList('video');
+            $param['pic'] = $this->getParamList('pic');
+            $param['updatetime'] = time();
+            $param['status'] = $this->getParamList('status');
             $data = $this->model->updateLifeById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -124,29 +133,30 @@ class LifeController extends \BaseController {
      *            array param 需要新增的信息
      * @return Json
      */
-    public function addLifeAction() {
+    public function addLifeAction()
+    {
         $param = array();
-        $param ['hotelid'] = $this->getParamList('hotelid');
-        $param ['typeid'] = $this->getParamList('typeid');
-        $param ['name_lang1'] = $this->getParamList('name_lang1');
-        $param ['name_lang2'] = $this->getParamList('name_lang2');
-        $param ['name_lang3'] = $this->getParamList('name_lang3');
-        $param ['address_lang1'] = $this->getParamList('address_lang1');
-        $param ['address_lang2'] = $this->getParamList('address_lang2');
-        $param ['address_lang3'] = $this->getParamList('address_lang3');
-        $param ['introduct_lang1'] = $this->getParamList('introduct_lang1');
-        $param ['introduct_lang2'] = $this->getParamList('introduct_lang2');
-        $param ['introduct_lang3'] = $this->getParamList('introduct_lang3');
-        $param ['tel'] = $this->getParamList('tel');
-        $param ['lat'] = $this->getParamList('lat');
-        $param ['lng'] = $this->getParamList('lng');
-        $param ['updatetime'] = time();
-        $param ['createtime'] = time();
-        $param ['status'] = $this->getParamList('status');
-        $param ['sort'] = intval($this->getParamList('sort'));
-        $param ['pdf'] = trim($this->getParamList('pdf'));
-        $param ['video'] = trim($this->getParamList('video'));
-        $param ['pic'] = trim($this->getParamList('pic'));
+        $param['hotelid'] = $this->getParamList('hotelid');
+        $param['typeid'] = $this->getParamList('typeid');
+        $param['name_lang1'] = $this->getParamList('name_lang1');
+        $param['name_lang2'] = $this->getParamList('name_lang2');
+        $param['name_lang3'] = $this->getParamList('name_lang3');
+        $param['address_lang1'] = $this->getParamList('address_lang1');
+        $param['address_lang2'] = $this->getParamList('address_lang2');
+        $param['address_lang3'] = $this->getParamList('address_lang3');
+        $param['introduct_lang1'] = $this->getParamList('introduct_lang1');
+        $param['introduct_lang2'] = $this->getParamList('introduct_lang2');
+        $param['introduct_lang3'] = $this->getParamList('introduct_lang3');
+        $param['tel'] = $this->getParamList('tel');
+        $param['lat'] = $this->getParamList('lat');
+        $param['lng'] = $this->getParamList('lng');
+        $param['updatetime'] = time();
+        $param['createtime'] = time();
+        $param['status'] = $this->getParamList('status');
+        $param['sort'] = intval($this->getParamList('sort'));
+        $param['pdf'] = trim($this->getParamList('pdf'));
+        $param['video'] = trim($this->getParamList('video'));
+        $param['pic'] = trim($this->getParamList('pic'));
         $data = $this->model->addLife($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);

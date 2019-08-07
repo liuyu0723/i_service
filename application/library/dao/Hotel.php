@@ -50,16 +50,16 @@ class Dao_Hotel extends Dao_Base
                 if ($response) {
                     foreach ($response->children() as $d) {
                         $room_types[] = array(
-                            'CName' => (string)$d->CName,
-                            'EName' => (string)$d->EName,
-                            'code' => (string)$d->code,
+                            'CName' => (string) $d->CName,
+                            'EName' => (string) $d->EName,
+                            'code' => (string) $d->code,
                             'photos' => array(
-                                'photo1' => (string)$d->photo1,
-                                'photo2' => (string)$d->photo2
+                                'photo1' => (string) $d->photo1,
+                                'photo2' => (string) $d->photo2
                             ),
-                            'qty' => (string)$d->qty,
-                            'status' => (string)$d->status,
-                            'seqId' => (string)$d->seqId
+                            'qty' => (string) $d->qty,
+                            'status' => (string) $d->status,
+                            'seqId' => (string) $d->seqId
                         );
                     }
                 }
@@ -108,26 +108,72 @@ class Dao_Hotel extends Dao_Base
                 if ($response) {
                     foreach ($response->children() as $d) {
                         $result[] = array(
-                            'rateCode' => (string)$d->rateCode,
-                            'rateCodeCName' => (string)$d->rateCodeCName,
-                            'rateCodeEName' => (string)$d->rateCodeEName,
-                            'rateDate' => (string)$d->rateDate,
-                            'ratePrice' => (string)$d->ratePrice,
-                            'rmTypeCDesc' => (string)$d->rmTypeCDesc,
-                            'rmTypeCName' => (string)$d->rmTypeCName,
-                            'rmTypeEDesc' => (string)$d->rmTypeEDesc,
-                            'rmTypeEName' => (string)$d->rmTypeEName,
-                            'rmtypeSwitch' => (string)$d->rmtypeSwitch,
-                            'vacRooms' => (string)$d->vacRooms,
-                            'rmType' => (string)$d->rmType,
+                            'rateCode' => (string) $d->rateCode,
+                            'rateCodeCName' => (string) $d->rateCodeCName,
+                            'rateCodeEName' => (string) $d->rateCodeEName,
+                            'rateDate' => (string) $d->rateDate,
+                            'ratePrice' => (string) $d->ratePrice,
+                            'rmTypeCDesc' => (string) $d->rmTypeCDesc,
+                            'rmTypeCName' => (string) $d->rmTypeCName,
+                            'rmTypeEDesc' => (string) $d->rmTypeEDesc,
+                            'rmTypeEName' => (string) $d->rmTypeEName,
+                            'rmtypeSwitch' => (string) $d->rmtypeSwitch,
+                            'vacRooms' => (string) $d->vacRooms,
+                            'rmType' => (string) $d->rmType,
 
-                            'minVacRooms' => (string)$d->minVacRooms,
-                            'needGuarant' => (string)$d->needGuarant,
-                            'needPay' => (string)$d->needPay,
+                            'minVacRooms' => (string) $d->minVacRooms,
+                            'needGuarant' => (string) $d->needGuarant,
+                            'needPay' => (string) $d->needPay,
 
-                            'breakfastDesc' => (string)$d->breakfastDesc,
-                            'breakfastEDesc' => (string)$d->breakfastEDesc,
+                            'breakfastDesc' => (string) $d->breakfastDesc,
+                            'breakfastEDesc' => (string) $d->breakfastEDesc,
+
+
+
+                            'size' => '',
+                            'title_lang1' => '',
+                            'title_lang2' => '',
+                            'title_lang3' => '',
+                            'panoramic' => '',
+                            'bedtype_lang1' => '',
+                            'bedtype_lang2' => '',
+                            'bedtype_lang3' => '',
+                            'detail_lang1' => '',
+                            'detail_lang2' => '',
+                            'detail_lang3' => '',
+                            'resid_list' => '',
+                            'pic' => ''
                         );
+                    }
+
+                    // load iservice data to 
+                    $romeTypeListDao = new Dao_Roomtype();
+                    $rtparamList = array();
+                    $rtparamList['hotelid'] = 99;
+                    $rtparamList['limit'] = 999;
+
+                    $roomTypeList = $romeTypeListDao->getRoomtypeList($rtparamList);
+                    if ($roomTypeList && count($roomTypeList) > 0 && $result && count($result) > 0) {
+                        for ($i = 0; $i < count($result); $i++) {
+                            for ($j = 0; $j < count($roomTypeList); $j++) {
+                                if ($result[$i]['rmTypeCName'] == $roomTypeList[$j]['title_lang1']) {
+                                    $result[$i]['size'] = $roomTypeList[$j]['size'];
+                                    $result[$i]['title_lang1'] = $roomTypeList[$j]['title_lang1'];
+                                    $result[$i]['title_lang2'] = $roomTypeList[$j]['title_lang2'];
+                                    $result[$i]['title_lang3'] = $roomTypeList[$j]['title_lang3'];
+                                    $result[$i]['panoramic'] = $roomTypeList[$j]['panoramic'];
+                                    $result[$i]['bedtype_lang1'] = $roomTypeList[$j]['bedtype_lang1'];
+                                    $result[$i]['bedtype_lang2'] = $roomTypeList[$j]['bedtype_lang2'];
+                                    $result[$i]['bedtype_lang3'] = $roomTypeList[$j]['bedtype_lang3'];
+                                    $result[$i]['detail_lang1'] = $roomTypeList[$j]['detail_lang1'];
+                                    $result[$i]['detail_lang2'] = $roomTypeList[$j]['detail_lang2'];
+                                    $result[$i]['detail_lang3'] = $roomTypeList[$j]['detail_lang3'];
+                                    $result[$i]['resid_list'] = $roomTypeList[$j]['resid_list'];
+                                    $result[$i]['pic'] = $roomTypeList[$j]['pic'];
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             } catch (Exception $e) {

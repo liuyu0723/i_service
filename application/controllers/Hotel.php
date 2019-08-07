@@ -119,6 +119,20 @@ class HotelController extends \BaseController
         $param['rmRate'] = floatval($this->getParamList('rmRate'));
         $param['channel'] = $this->getParamList('channel');
 
+
+
+        if (!$param['source']) {
+            $param['source'] = "GD";
+        }
+
+        if (!$param['market']) {
+            $param['market'] = 10;
+        }
+
+        if (!$param['channel']) {
+            $param['channel'] = "WEDCT";
+        }
+
         // check param
         $passValidation = true;
         foreach ($param as $p) {

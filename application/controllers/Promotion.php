@@ -4,7 +4,8 @@
  * 酒店促销控制器类
  *
  */
-class PromotionController extends \BaseController {
+class PromotionController extends \BaseController
+{
 
     /**
      * @var PromotionModel
@@ -14,10 +15,11 @@ class PromotionController extends \BaseController {
     /** @var  Convertor_Promotion */
     private $convertor;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        $this->model = new PromotionModel ();
-        $this->convertor = new Convertor_Promotion ();
+        $this->model = new PromotionModel();
+        $this->convertor = new Convertor_Promotion();
     }
 
     /**
@@ -25,20 +27,27 @@ class PromotionController extends \BaseController {
      *
      * @return Json
      */
-    public function getPromotionListAction() {
+    public function getPromotionListAction()
+    {
         $param = array();
-        $param ['hotelid'] = intval($this->getParamList('hotelid'));
-        $param ['tagid'] = intval($this->getParamList('tagid'));
-        $param ['id'] = intval($this->getParamList('id'));
-        $param ['status'] = $this->getParamList('status');
-        if(Enum_System::notAdminPackage($this->package)){
-            $param ['status'] = 1;
+        $param['hotelid'] = intval($this->getParamList('hotelid'));
+        $param['tagid'] = intval($this->getParamList('tagid'));
+        $param['id'] = intval($this->getParamList('id'));
+        $param['status'] = $this->getParamList('status');
+
+
+        if (is_null($param['status'])) {
+            $param['status'] = 1;
         }
-        $param ['title'] = $this->getParamList('title');
+
+        if (Enum_System::notAdminPackage($this->package)) {
+            $param['status'] = 1;
+        }
+        $param['title'] = $this->getParamList('title');
         $this->getPageParam($param);
         $promotionList = $this->model->getPromotionList($param);
         $promotionCount = $this->model->getPromotionCount($param);
-        $promotionTagModel = new PromotionTagModel ();
+        $promotionTagModel = new PromotionTagModel();
         $tagList = $promotionTagModel->getPromotionTagList($param);
         Enum_System::notAdminPackage($this->package) ? $data = $this->convertor->getPromotionListConvertor($promotionList, $tagList, $promotionCount, $param) : $data = $this->convertor->getAdminPromotionListConvertor($promotionList, $tagList, $promotionCount, $param);
         $this->echoSuccessData($data);
@@ -51,7 +60,8 @@ class PromotionController extends \BaseController {
      *            int id 获取详情信息的id
      * @return Json
      */
-    public function getPromotionDetailAction() {
+    public function getPromotionDetailAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $data = $this->model->getPromotionDetail($id);
@@ -71,25 +81,26 @@ class PromotionController extends \BaseController {
      *            array param 需要更新的字段
      * @return Json
      */
-    public function updatePromotionByIdAction() {
+    public function updatePromotionByIdAction()
+    {
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
-            $param ['hotelid'] = $this->getParamList('hotelid');
-            $param ['url'] = $this->getParamList('url');
-            $param ['title_lang1'] = $this->getParamList('title_lang1');
-            $param ['title_lang2'] = $this->getParamList('title_lang2');
-            $param ['title_lang3'] = $this->getParamList('title_lang3');
-            $param ['article_lang1'] = $this->getParamList('article_lang1');
-            $param ['article_lang2'] = $this->getParamList('article_lang2');
-            $param ['article_lang3'] = $this->getParamList('article_lang3');
-            $param ['tagid'] = $this->getParamList('tagid');
-            $param ['status'] = $this->getParamList('status');
-            $param ['sort'] = $this->getParamList('sort');
-            $param ['pdf'] = $this->getParamList('pdf');
-            $param ['video'] = $this->getParamList('video');
-            $param ['pic'] = $this->getParamList('pic');
-            $param ['updatetime'] = time();
+            $param['hotelid'] = $this->getParamList('hotelid');
+            $param['url'] = $this->getParamList('url');
+            $param['title_lang1'] = $this->getParamList('title_lang1');
+            $param['title_lang2'] = $this->getParamList('title_lang2');
+            $param['title_lang3'] = $this->getParamList('title_lang3');
+            $param['article_lang1'] = $this->getParamList('article_lang1');
+            $param['article_lang2'] = $this->getParamList('article_lang2');
+            $param['article_lang3'] = $this->getParamList('article_lang3');
+            $param['tagid'] = $this->getParamList('tagid');
+            $param['status'] = $this->getParamList('status');
+            $param['sort'] = $this->getParamList('sort');
+            $param['pdf'] = $this->getParamList('pdf');
+            $param['video'] = $this->getParamList('video');
+            $param['pic'] = $this->getParamList('pic');
+            $param['updatetime'] = time();
             $data = $this->model->updatePromotionById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -105,21 +116,22 @@ class PromotionController extends \BaseController {
      *            array param 需要新增的信息
      * @return Json
      */
-    public function addPromotionAction() {
+    public function addPromotionAction()
+    {
         $param = array();
-        $param ['hotelid'] = $this->getParamList('hotelid');
-        $param ['url'] = $this->getParamList('url');
-        $param ['title_lang1'] = $this->getParamList('title_lang1');
-        $param ['title_lang2'] = $this->getParamList('title_lang2');
-        $param ['title_lang3'] = $this->getParamList('title_lang3');
-        $param ['tagid'] = $this->getParamList('tagid');
-        $param ['status'] = $this->getParamList('status');
-        $param ['updatetime'] = time();
-        $param ['createtime'] = time();
-        $param ['sort'] = intval($this->getParamList('sort'));
-        $param ['pdf'] = trim($this->getParamList('pdf'));
-        $param ['video'] = trim($this->getParamList('video'));
-        $param ['pic'] = trim($this->getParamList('pic'));
+        $param['hotelid'] = $this->getParamList('hotelid');
+        $param['url'] = $this->getParamList('url');
+        $param['title_lang1'] = $this->getParamList('title_lang1');
+        $param['title_lang2'] = $this->getParamList('title_lang2');
+        $param['title_lang3'] = $this->getParamList('title_lang3');
+        $param['tagid'] = $this->getParamList('tagid');
+        $param['status'] = $this->getParamList('status');
+        $param['updatetime'] = time();
+        $param['createtime'] = time();
+        $param['sort'] = intval($this->getParamList('sort'));
+        $param['pdf'] = trim($this->getParamList('pdf'));
+        $param['video'] = trim($this->getParamList('video'));
+        $param['pic'] = trim($this->getParamList('pic'));
         $data = $this->model->addPromotion($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);
