@@ -176,6 +176,13 @@ class HotelAdministratorController extends \BaseController {
     }
 
 
+    public function getStaffPermissionAction()
+    {
+        $list = Enum_HotelAdministrator::getStaffPermission();
+        $this->echoSuccessData(array('list' => $list));
+    }
+
+
     /**
      * Get department list and level list
      */

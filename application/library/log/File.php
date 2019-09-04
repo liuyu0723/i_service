@@ -218,6 +218,20 @@ class Log_File extends \Yaf_Controller_Abstract {
     public static function writeOneLineLog($path, $msg) {
         return self::write($path, $msg, false, "", true);
     }
-}
 
-?>
+    public static function writeSimpleLog($name, $msg, $paramList = array())
+    {
+        if (empty($msg) || trim($msg) == "") {
+            return FALSE;
+        }
+        if (empty($name) || trim($name) == "") {
+            return FALSE;
+        }
+        $msg = "content: " . trim($msg) . "\r\n";
+        if ($paramList) {
+            $msg .= "paramList:" . http_build_query($paramList);
+        }
+        return self::write($name, $msg, false);
+    }
+
+}

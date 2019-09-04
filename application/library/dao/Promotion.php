@@ -72,6 +72,21 @@ class Dao_Promotion extends Dao_Base {
         	$whereCase[] = $param['title'];
         	$whereCase[] = $param['title'];
         }
+
+
+        if (array_key_exists('enable_lang1', $param)) {
+            $whereSql[] = 'enable_lang1 = ?';
+            $whereCase[] = $param['enable_lang1'];
+        }
+        if (array_key_exists('enable_lang2', $param)) {
+            $whereSql[] = 'enable_lang2 = ?';
+            $whereCase[] = $param['enable_lang2'];
+        }
+        if (array_key_exists('enable_lang3', $param)) {
+            $whereSql[] = 'enable_lang3 = ?';
+            $whereCase[] = $param['enable_lang3'];
+        }
+
         $whereSql = $whereSql ? ' where ' . implode(' and ', $whereSql) : '';
         return array(
             'sql' => $whereSql,

@@ -25,18 +25,17 @@ class PromotionModel extends \BaseModel
      *            array param 查询条件
      * @return array
      */
-    public function getPromotionList(array $param)
-    {
-        $param['id'] ? $paramList['id'] = $param['id'] : false;
-        $param['title'] ? $paramList['title'] = $param['title'] : false;
-        isset($param['hotelid']) ? $paramList['hotelid'] = intval($param['hotelid']) : false;
-        $param['tagid'] ? $paramList['tagid'] = intval($param['tagid']) : false;
-        isset($param['status']) ? $paramList['status'] = intval($param['status']) : false;
+    public function getPromotionList(array $param) {
+        $param ['id'] ? $paramList ['id'] = $param ['id'] : false;
+        $param ['title'] ? $paramList ['title'] = $param ['title'] : false;
+        isset ($param ['hotelid']) ? $paramList ['hotelid'] = intval($param ['hotelid']) : false;
+        $param ['tagid'] ? $paramList ['tagid'] = intval($param ['tagid']) : false;
+        isset ($param ['status']) ? $paramList ['status'] = intval($param ['status']) : false;
         array_key_exists('enable_lang1', $param) ? $paramList['enable_lang1'] = intval($param['enable_lang1']) : false;
         array_key_exists('enable_lang2', $param) ? $paramList['enable_lang2'] = intval($param['enable_lang2']) : false;
         array_key_exists('enable_lang3', $param) ? $paramList['enable_lang3'] = intval($param['enable_lang3']) : false;
-        $paramList['limit'] = $param['limit'];
-        $paramList['page'] = $param['page'];
+        $paramList ['limit'] = $param ['limit'];
+        $paramList ['page'] = $param ['page'];
         return $this->dao->getPromotionList($paramList);
     }
 
@@ -102,25 +101,6 @@ class PromotionModel extends \BaseModel
             isset($param['pdf']) ? $info['pdf'] = $param['pdf'] : false;
             isset($param['video']) ? $info['video'] = $param['video'] : false;
             isset($param['pic']) ? $info['pic'] = $param['pic'] : false;
-            isset($param['enable_lang1']) ? $info['enable_lang1'] = $param['enable_lang1'] : false;
-            isset($param['enable_lang2']) ? $info['enable_lang2'] = $param['enable_lang2'] : false;
-            isset($param['enable_lang3']) ? $info['enable_lang3'] = $param['enable_lang3'] : false;
-
-            isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : 0;
-            if ($info['homeShow'] == '') {
-                $info['homeShow'] = 1;
-            }
-
-            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : time();
-            if ($info['startTime'] == '') {
-                $info['startTime'] = time();
-            }
-
-            isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : time();
-            if ($info['endTime'] == '') {
-                $info['endTime'] = time();
-            }
-
             $result = $this->dao->updatePromotionById($info, $id);
         }
         return $result;
@@ -133,18 +113,7 @@ class PromotionModel extends \BaseModel
      *            array param 需要增加的信息
      * @return array
      */
-    public function addPromotion($param)
-    {
-        if (is_null($param['enable_lang1'])) {
-            unset($param['enable_lang1']);
-        }
-        if (is_null($param['enable_lang2'])) {
-            unset($param['enable_lang2']);
-        }
-        if (is_null($param['enable_lang3'])) {
-            unset($param['enable_lang3']);
-        }
-
+    public function addPromotion($param) {
         $info = $param;
         return $this->dao->addPromotion($info);
     }

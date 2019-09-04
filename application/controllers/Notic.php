@@ -87,23 +87,28 @@ class NoticController extends \BaseController
 	{
 		$id = intval($this->getParamList('id'));
 		if ($id) {
-			$param = array();
-			$param['hotelid'] = $this->getParamList('hotelid');
-			$param['status'] = $this->getParamList('status');
-			$param['title_lang1'] = $this->getParamList('title_lang1');
-			$param['title_lang2'] = $this->getParamList('title_lang2');
-			$param['title_lang3'] = $this->getParamList('title_lang3');
-			$param['article_lang1'] = $this->getParamList('article_lang1');
-			$param['article_lang2'] = $this->getParamList('article_lang2');
-			$param['article_lang3'] = $this->getParamList('article_lang3');
-			$param['tagid'] = $this->getParamList('tagid');
-			$param['sort'] = $this->getParamList('sort');
-			$param['pdf'] = $this->getParamList('pdf');
-			$param['pic'] = $this->getParamList('pic');
-			$param['video'] = $this->getParamList('video');
-			$param['updatetime'] = time();
-			$data = $this->model->updateNoticById($param, $id);
-			$data = $this->convertor->statusConvertor($data);
+			$param = array ();
+			$param ['hotelid'] = $this->getParamList ( 'hotelid' );
+			$param ['status'] = $this->getParamList ( 'status' );
+			$param ['title_lang1'] = $this->getParamList ( 'title_lang1' );
+			$param ['title_lang2'] = $this->getParamList ( 'title_lang2' );
+			$param ['title_lang3'] = $this->getParamList ( 'title_lang3' );
+			$param ['article_lang1'] = $this->getParamList ( 'article_lang1' );
+			$param ['article_lang2'] = $this->getParamList ( 'article_lang2' );
+			$param ['article_lang3'] = $this->getParamList ( 'article_lang3' );
+			$param ['tagid'] = $this->getParamList ( 'tagid' );
+            $param ['sort'] = $this->getParamList('sort');
+            $param ['pdf'] = $this->getParamList('pdf');
+            $param ['pic'] = $this->getParamList('pic');
+            $param ['video'] = $this->getParamList('video');
+			$param ['updatetime'] = time ();
+
+			$param ['homeShow'] = trim($this->getParamList('homeShow'));
+            $param ['startTime'] = trim($this->getParamList('startTime'));
+			$param ['endTime'] = trim($this->getParamList('endTime'));
+			
+			$data = $this->model->updateNoticById ( $param, $id );
+			$data = $this->convertor->statusConvertor ( $data );
 		} else {
 			$this->throwException(1, 'id不能为空');
 		}
@@ -117,23 +122,22 @@ class NoticController extends \BaseController
 	 *        	array param 需要新增的信息
 	 * @return Json
 	 */
-	public function addNoticAction()
-	{
-		$param = array();
-		$param['hotelid'] = $this->getParamList('hotelid');
-		$param['status'] = $this->getParamList('status');
-		$param['title_lang1'] = $this->getParamList('title_lang1');
-		$param['title_lang2'] = $this->getParamList('title_lang2');
-		$param['title_lang3'] = $this->getParamList('title_lang3');
-		$param['tagid'] = $this->getParamList('tagid');
-		$param['sort'] = intval($this->getParamList('sort'));
-		$param['pdf'] = trim($this->getParamList('pdf'));
-		$param['pic'] = trim($this->getParamList('pic'));
-		$param['video'] = trim($this->getParamList('video'));
-		$param['updatetime'] = time();
-		$param['createtime'] = time();
-		$data = $this->model->addNotic($param);
-		$data = $this->convertor->statusConvertor(array('id' => $data));
-		$this->echoSuccessData($data);
+	public function addNoticAction() {
+		$param = array ();
+		$param ['hotelid'] = $this->getParamList ( 'hotelid' );
+		$param ['status'] = $this->getParamList ( 'status' );
+		$param ['title_lang1'] = $this->getParamList ( 'title_lang1' );
+		$param ['title_lang2'] = $this->getParamList ( 'title_lang2' );
+		$param ['title_lang3'] = $this->getParamList ( 'title_lang3' );
+		$param ['tagid'] = $this->getParamList ( 'tagid' );
+        $param ['sort'] = intval($this->getParamList('sort'));
+        $param ['pdf'] = trim($this->getParamList('pdf'));
+        $param ['pic'] = trim($this->getParamList('pic'));
+        $param ['video'] = trim($this->getParamList('video'));
+		$param ['updatetime'] = time ();
+		$param ['createtime'] = time ();
+		$data = $this->model->addNotic ( $param );
+		$data = $this->convertor->statusConvertor ( array ('id' => $data ) );
+		$this->echoSuccessData ( $data );
 	}
 }

@@ -22,8 +22,8 @@ class ActivityController extends \BaseController
     public function init()
     {
         parent::init();
-        $this->model = new ActivityModel();
-        $this->convertor = new Convertor_Activity();
+        $this->model = new ActivityModel ();
+        $this->convertor = new Convertor_Activity (!Enum_System::notAdminPackage($this->package));
     }
 
     /**
@@ -85,11 +85,15 @@ class ActivityController extends \BaseController
         $id = intval($this->getParamList('id'));
         if ($id) {
             $data = $this->model->getActivityDetail($id);
-            $data = $this->convertor->getActivityDetail($data);
+            $photos = $this->model->getPhotoList(array(
+               'activity_id' => $id,
+                'status' => 1
+            ));
+            $data = $this->convertor->getActivityDetail($data, $photos);
+            $this->echoJson($data);
         } else {
             $this->throwException(1, '查询条件错误，id不能为空');
         }
-        $this->echoJson($data);
     }
 
     /**
@@ -106,23 +110,23 @@ class ActivityController extends \BaseController
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
-            $param['hotelid'] = $this->getParamList('hotelid');
-            $param['groupid'] = $this->getParamList('groupid');
-            $param['tagid'] = $this->getParamList('tagid');
-            $param['status'] = $this->getParamList('status');
-            $param['pic'] = $this->getParamList('pic');
-            $param['fromdate'] = $this->getParamList('fromdate');
-            $param['todate'] = $this->getParamList('todate');
-            $param['ordercount'] = $this->getParamList('ordercount');
-            $param['title_lang1'] = $this->getParamList('title_lang1');
-            $param['title_lang2'] = $this->getParamList('title_lang2');
-            $param['title_lang3'] = $this->getParamList('title_lang3');
-            $param['article_lang1'] = $this->getParamList('article_lang1');
-            $param['article_lang2'] = $this->getParamList('article_lang2');
-            $param['article_lang3'] = $this->getParamList('article_lang3');
-            $param['sort'] = $this->getParamList('sort');
-            $param['pdf'] = $this->getParamList('pdf');
-            $param['video'] = $this->getParamList('video');
+            $param ['hotelid'] = $this->getParamList('hotelid');
+            $param ['groupid'] = $this->getParamList('groupid');
+            $param ['tagid'] = $this->getParamList('tagid');
+            $param ['status'] = $this->getParamList('status');
+            $param ['pic'] = $this->getParamList('pic');
+            $param ['fromdate'] = $this->getParamList('fromdate');
+            $param ['todate'] = $this->getParamList('todate');
+            $param ['ordercount'] = $this->getParamList('ordercount');
+            $param ['title_lang1'] = $this->getParamList('title_lang1');
+            $param ['title_lang2'] = $this->getParamList('title_lang2');
+            $param ['title_lang3'] = $this->getParamList('title_lang3');
+            $param ['article_lang1'] = $this->getParamList('article_lang1');
+            $param ['article_lang2'] = $this->getParamList('article_lang2');
+            $param ['article_lang3'] = $this->getParamList('article_lang3');
+            $param ['sort'] = $this->getParamList('sort');
+            $param ['pdf'] = $this->getParamList('pdf');
+            $param ['video'] = $this->getParamList('video');
             $data = $this->model->updateActivityById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -134,29 +138,70 @@ class ActivityController extends \BaseController
     /**
      * 添加活动信息
      *
-     * @param
-     *            array param 需要新增的信息
-     * @return Json
      */
     public function addActivityAction()
     {
         $param = array();
-        $param['hotelid'] = intval($this->getParamList('hotelid'));
-        $param['groupid'] = intval($this->getParamList('groupid'));
-        $param['tagid'] = intval($this->getParamList('tagid'));
-        $param['status'] = intval($this->getParamList('status'));
-        $param['pic'] = $this->getParamList('pic');
-        $param['fromdate'] = $this->getParamList('fromdate');
-        $param['todate'] = $this->getParamList('todate');
-        $param['ordercount'] = $this->getParamList('ordercount');
-        $param['title_lang1'] = trim($this->getParamList('title_lang1'));
-        $param['title_lang2'] = trim($this->getParamList('title_lang2'));
-        $param['title_lang3'] = trim($this->getParamList('title_lang3'));
-        $param['sort'] = intval($this->getParamList('sort'));
-        $param['pdf'] = trim($this->getParamList('pdf'));
-        $param['video'] = trim($this->getParamList('video'));
+        $param ['hotelid'] = intval($this->getParamList('hotelid'));
+        $param ['groupid'] = intval($this->getParamList('groupid'));
+        $param ['tagid'] = intval($this->getParamList('tagid'));
+        $param ['status'] = intval($this->getParamList('status'));
+        $param ['pic'] = $this->getParamList('pic');
+        $param ['fromdate'] = $this->getParamList('fromdate');
+        $param ['todate'] = $this->getParamList('todate');
+        $param ['ordercount'] = $this->getParamList('ordercount');
+        $param ['title_lang1'] = trim($this->getParamList('title_lang1'));
+        $param ['title_lang2'] = trim($this->getParamList('title_lang2'));
+        $param ['title_lang3'] = trim($this->getParamList('title_lang3'));
+        $param ['sort'] = intval($this->getParamList('sort'));
+        $param ['pdf'] = trim($this->getParamList('pdf'));
+        $param ['video'] = trim($this->getParamList('video'));
         $data = $this->model->addActivity($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);
     }
+
+    public function addPhotoAction()
+    {
+        $param = array();
+        $param['hotelid'] = intval($this->getParamList('hotelid'));
+        $param['activity_id'] = intval($this->getParamList('activity_id'));
+        $param['pic'] = $this->getParamList('pic');
+        $param['status'] = intval($this->getParamList('status'));
+        $param['sort'] = intval($this->getParamList('sort'));
+
+        $data = $this->model->addPhoto($param);
+        $data = $this->convertor->statusConvertor(array('id' => $data));
+        $this->echoSuccessData($data);
+    }
+
+    public function updatePhotoByIdAction()
+    {
+        $param = array();
+        $id = intval($this->getParamList('id'));
+        $param['activity_id'] = intval($this->getParamList('activity_id'));
+        $param['pic'] = $this->getParamList('pic');
+        $param['status'] = intval($this->getParamList('status'));
+        $param['sort'] = intval($this->getParamList('sort'));
+
+        $data = $this->model->updatePhotoById($param, $id);
+        $this->echoSuccessData($data);
+    }
+
+    public function getActivityPhotoListAction()
+    {
+        $param = array();
+        $param['hotelid'] = $this->getParamList('hotelid');
+        $param['activity_id'] = $this->getParamList('activity_id');
+        $param['status'] = $this->getParamList('status');
+
+        $param['limit'] = intval($this->getParamList('limit'));
+        $param['page'] = intval($this->getParamList('page'));
+        $data = $this->model->getPhotoList($param);
+
+        $data = $this->convertor->photoList($data);
+        $this->echoSuccessData($data);
+    }
+
+
 }

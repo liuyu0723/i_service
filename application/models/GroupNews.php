@@ -6,6 +6,9 @@
  */
 class GroupNewsModel extends \BaseModel {
 
+    const ENABLE_LANG = 'enable_lang';
+    const ENABLE = 1;
+
     private $dao;
 
     public function __construct() {
@@ -27,6 +30,9 @@ class GroupNewsModel extends \BaseModel {
         $param ['title_lang1'] ? $paramList ['title_lang1'] = $param ['title_lang1'] : false;
         $param ['title_lang2'] ? $paramList ['title_lang2'] = $param ['title_lang2'] : false;
         isset ($param ['status']) ? $paramList ['status'] = intval($param ['status']) : false;
+        array_key_exists('enable_lang1', $param) ? $paramList['enable_lang1'] = intval($param['enable_lang1']) : false;
+        array_key_exists('enable_lang2', $param) ? $paramList['enable_lang2'] = intval($param['enable_lang2']) : false;
+        array_key_exists('enable_lang3', $param) ? $paramList['enable_lang3'] = intval($param['enable_lang3']) : false;
         $paramList ['limit'] = $param ['limit'];
         $paramList ['page'] = $param ['page'];
         return $this->dao->getNewsList($paramList);
@@ -43,6 +49,9 @@ class GroupNewsModel extends \BaseModel {
         isset ($param ['groupid']) ? $paramList ['groupid'] = intval($param ['groupid']) : false;
         $param ['tagid'] ? $paramList ['tagid'] = intval($param ['tagid']) : false;
         isset ($param ['status']) ? $paramList ['status'] = intval($param ['status']) : false;
+        array_key_exists('enable_lang1', $param) ? $paramList['enable_lang1'] = intval($param['enable_lang1']) : false;
+        array_key_exists('enable_lang2', $param) ? $paramList['enable_lang2'] = intval($param['enable_lang2']) : false;
+        array_key_exists('enable_lang3', $param) ? $paramList['enable_lang3'] = intval($param['enable_lang3']) : false;
         return $this->dao->getNewsCount($paramList);
     }
 
@@ -76,6 +85,9 @@ class GroupNewsModel extends \BaseModel {
             $info = array();
             isset($param ['groupid']) ? $info ['groupid'] = $param ['groupid'] : false;
             isset($param ['status']) ? $info ['status'] = $param ['status'] : false;
+            isset($param ['enable_lang1']) ? $info ['enable_lang1'] = $param ['enable_lang1'] : false;
+            isset($param ['enable_lang2']) ? $info ['enable_lang2'] = $param ['enable_lang2'] : false;
+            isset($param ['enable_lang3']) ? $info ['enable_lang3'] = $param ['enable_lang3'] : false;
             $param ['title_lang1'] ? $info ['title_lang1'] = $param ['title_lang1'] : false;
             $param ['title_lang2'] ? $info ['title_lang2'] = $param ['title_lang2'] : false;
             $info['link_lang1'] = trim($param['link_lang1']);
@@ -101,7 +113,17 @@ class GroupNewsModel extends \BaseModel {
      *            array param 需要增加的信息
      * @return array
      */
-    public function addNews($param) {
+    public function addNews($param)
+    {
+        if (is_null($param ['enable_lang1'])) {
+            unset($param ['enable_lang1']);
+        }
+        if (is_null($param ['enable_lang2'])) {
+            unset($param ['enable_lang2']);
+        }
+        if (is_null($param ['enable_lang3'])) {
+            unset($param ['enable_lang3']);
+        }
         $info = $param;
         return $this->dao->addNews($info);
     }

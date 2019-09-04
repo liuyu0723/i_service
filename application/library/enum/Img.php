@@ -11,6 +11,8 @@ class Enum_Img {
     const MESSAGE_SHOPPING_ICON = 'iservicev2_img_manual_shopping.png';
     const MESSAGE_NOTIFICATION_ICON = 'iservicev2_img_manual_notification.png';
 
+    const OSS_PROCESS_FORMAT = "?x-oss-process=image/resize,w_%s,h_%s";
+
 
     /**
      * 根据key和类型获取图片路径
@@ -30,6 +32,21 @@ class Enum_Img {
             $picIdIndex = $picId[0];
             $idel = $picIdIndex == '/' ? '' : '/';
             $url = self::OSS_IMGURL . $idel . $picId . ($imgType ? '!' . $imgType : '');
+        }
+        return $url;
+    }
+
+    public static function getPathByKeyAndSize($picId, $heigh=200, $width=200) {
+        $url = '';
+        if (!empty($picId)) {
+            $picId = str_replace(array(
+                "_",
+                "//"
+            ), "/", $picId);
+            $picIdIndex = $picId[0];
+            $idel = $picIdIndex == '/' ? '' : '/';
+            $url = self::OSS_IMGURL . $idel . $picId;
+            $url .= sprintf(self::OSS_PROCESS_FORMAT, $width, $heigh);
         }
         return $url;
     }

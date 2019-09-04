@@ -78,6 +78,18 @@ class Dao_Push extends Dao_Base {
             $whereSql[] = 'platform = ?';
             $whereCase[] = $param['platform'];
         }
+        if (isset($param['is_send'])) {
+            $whereSql[] = 'is_send = ?';
+            $whereCase[] = $param['is_send'];
+        }
+        if (isset($param['send_time'])) {
+            $whereSql[] = 'send_time <= ?';
+            $whereCase[] = $param['send_time'];
+        }
+        if (isset($param['min_id'])){
+            $whereSql[] = 'id >= ?';
+            $whereCase[] = $param['min_id'];
+        }
         if (isset($param['result'])) {
             if ($param['result'] > 0) {
                 $whereSql[] = 'result <> ?';
@@ -119,7 +131,7 @@ class Dao_Push extends Dao_Base {
         $result = false;
 
         if ($id) {
-            $result = $this->db->update('iservice_push', $info, $id);
+            $result = $this->db->update('iservice_push', $info, array('id' => $id));
         }
 
         return $result;

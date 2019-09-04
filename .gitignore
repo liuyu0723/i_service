@@ -8,6 +8,7 @@ env/
 *.swo
 .idea/
 .log/*
+scripts/logs/*
 
 /vendor/
 composer.lock

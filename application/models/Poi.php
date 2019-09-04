@@ -137,16 +137,4 @@ class PoiModel extends \BaseModel
         $info = $param;
         return $this->dao->addPoi($info);
     }
-
-    /**
-     * 获取首页广告列表
-     *
-     * @return Json
-     */
-    public function getHomeAdv(array $param)
-    {
-        isset($param['hotelid']) ? $paramList['hotelid'] = $param['hotelid'] : false;
-        $paramList['today'] = $param['today'];
-        return $this->dao->getHomeAdv($paramList);
-    }
 }

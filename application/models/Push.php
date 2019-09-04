@@ -11,6 +11,11 @@ class PushModel extends \BaseModel {
     const APP_YSG_GROUP_ID = 1;
     const APP_SHANSHUI_GROUP_ID = 2;
 
+    const TIMER_MSG_NOT_SEND = 0;
+    const TIMER_MSG_ALREADY_SEND = 1;
+
+    const TIMER_CRONTAB_LOG = "timerMsg";
+
     private $dao;
 
     public function __construct() {
@@ -32,9 +37,166 @@ class PushModel extends \BaseModel {
         $param['content_type'] ? $paramList['content_type'] = $param['content_type'] : false;
         isset($param['result']) ? $paramList['result'] = intval($param['result']) : false;
         isset($param['platform']) ? $paramList['platform'] = intval($param['platform']) : false;
+        isset($param['is_send']) ? $paramList['is_send'] = intval($param['is_send']) : false;
+        isset($param['send_time']) ? $paramList['send_time'] = trim($param['send_time']) : false;
+        isset($param['min_id']) ? $paramList['min_id'] = trim($param['min_id']) : false;
         $paramList['limit'] = $param['limit'];
         $paramList['page'] = $param['page'];
         return $this->dao->getPushList($paramList);
+    }
+
+    /**
+     *
+     * @param array $msgList
+     */
+    public function processList(array $msgList)
+    {
+        foreach ($msgList as $msg) {
+            try {
+                $this->sendMsg($msg);
+                Log_File::writeSimpleLog(self::TIMER_CRONTAB_LOG, sprintf("Sending message [%s]", $msg['id']));
+            } catch (Exception $e) {
+                Log_File::writeSimpleLog(self::TIMER_CRONTAB_LOG, sprintf("[%s]: ", $msg['id']) . $e->getTraceAsString());
+            }
+        }
+    }
+
+    /**
+     * Only send message, no DB operation
+     *
+     * @param $msg
+     */
+    public function sendMsg($msg)
+    {
+        $pushParams = array();
+        $info = array();
+
+        if (empty($msg['type'])) {
+            $this->throwException('推送类型错误', 3);
+        }
+        $msg['dataid'] = trim($msg['dataid']);
+        if (empty($msg['cn_value']) && empty($msg['en_value'])) {
+            $this->throwException("Title empty${$msg['id']}", 4);
+        }
+
+        if ($msg['content_type'] && $msg['content_value']) {
+            $pushParams['contentType'] = $msg['content_type'];
+            $pushParams['contentValue'] = $msg['content_value'];
+        } elseif ($msg['url']) {
+            $pushParams['contentType'] = Enum_Push::PUSH_CONTENT_TYPE_URL;
+            $pushParams['contentValue'] = $msg['content_value'];
+        }
+        if (empty($pushParams['contentType']) || empty($pushParams['contentValue'])) {
+            $this->throwException('推送主体错误', 5);
+        }
+
+        switch ($msg['type']) {
+            case Enum_Push::PUSH_TYPE_ALL : //全量推送
+                $pushParams['phoneType'] = $msg['platform'];
+                $pushParams['type'] = Enum_Push::PUSH_TYPE_ALL;
+                $pushParams['cnTitle'] = $msg['cn_title'];
+                $pushParams['cnValue'] = $msg['cn_value'];
+                $pushParams['enTitle'] = $msg['en_title'];
+                $pushParams['enValue'] = $msg['en_value'];
+                break;
+            case Enum_Push::PUSH_TYPE_USER ://按照用户推送
+                if (empty($msg['dataid'])) {
+                    $this->throwException('推送ID错误', 4);
+                }
+                $pushParams['type'] = Enum_Push::PUSH_TYPE_ALIAS;
+                $userModel = new UserModel();
+                $userInfo = $userModel->getUserDetail($msg['dataid']);
+                if (empty($userInfo['platform'])) {
+                    $this->throwException('找不到用户登录设备信息', 4);
+                }
+                $info['platform'] = $pushParams['phoneType'] = $userInfo['platform'];
+                $pushParams['dataid'] = $userInfo['id'];
+                $pushParams['datatype'] = Enum_Push::PUSH_ALIAS_USER_PREFIX;
+                if ($userInfo['language'] == 'zh') {
+                    $pushParams['language'] = Enum_Push::PUSH_TAG_LANG_CN;
+                    $pushParams['title'] = $msg['cn_title'];
+                    $pushParams['value'] = $msg['cn_value'];
+                } else {
+                    $pushParams['language'] = Enum_Push::PUSH_TAG_LANG_EN;
+                    $pushParams['title'] = $msg['en_title'];
+                    $pushParams['value'] = $msg['en_value'];
+                }
+                break;
+            case Enum_Push::PUSH_TYPE_HOTEL ://物业全量推送
+                if (empty($msg['dataid'])) {
+                    $this->throwException('推送ID错误', 4);
+                }
+                $pushParams['phoneType'] = $msg['platform'];
+                $pushParams['cnTitle'] = $msg['cn_title'];
+                $pushParams['cnValue'] = $msg['cn_value'];
+                $pushParams['enTitle'] = $msg['en_title'];
+                $pushParams['enValue'] = $msg['en_value'];
+                $pushParams['hotelId'] = $msg['dataid'];
+                $pushParams['type'] = Enum_Push::PUSH_TYPE_TAG;
+                break;
+            default:
+                $this->throwException("Not support for timer", 5);
+
+        }
+        $pushResult = $this->_pushMsg($pushParams);
+        $info['is_send'] = self::TIMER_MSG_ALREADY_SEND;
+        $info['result'] = $pushResult['code'];
+        $info['request'] = $pushResult['body'];
+        $info['httpcode'] = $pushResult['httpCode'];
+        $info['response'] = $pushResult['result'];
+        $this->updatePushById($info, $msg['id']);
+    }
+
+
+    /**
+     * Only store the message, no sending
+     *
+     * @param array $params
+     * @return int
+     */
+    public function storeMsg(array $params): int
+    {
+        $info = array();
+        isset($params['type']) ? $info['type'] = intval($params['type']) : false;
+        if (empty($info['type'])) {
+            $this->throwException('推送类型错误', 3);
+        }
+        isset($params['dataid']) ? $info['dataid'] = intval($params['dataid']) : false;
+        isset($params['platform']) ? $info['platform'] = intval($params['platform']) : false;
+
+        isset($params['cn_title']) ? $info['cn_title'] = trim($params['cn_title']) : false;
+        isset($params['cn_value']) ? $info['cn_value'] = trim($params['cn_value']) : false;
+        isset($params['en_title']) ? $info['en_title'] = trim($params['en_title']) : false;
+        isset($params['en_value']) ? $info['en_value'] = trim($params['en_value']) : false;
+        isset($params['message_type']) ? $info['message_type'] = $params['message_type'] : false;
+        if (empty($info['cn_value']) && empty($info['en_value'])) {
+            $this->throwException('推送内容错误', 4);
+        }
+
+        if ($params['contentType'] && $params['contentValue']) {
+            $info['content_type'] = $params['contentType'];
+            $info['content_value'] = $params['contentValue'];
+        } elseif ($params['url']) {
+            $info['contentType'] = Enum_Push::PUSH_CONTENT_TYPE_URL;
+            $info['contentValue'] = $params['url'];
+        }
+
+        if (isset($params['send_time'])) {
+            $info['send_time'] = $params['send_time'];
+            $info['is_send'] = self::TIMER_MSG_NOT_SEND;
+            $info['request'] = '';
+            $info['response'] = '';
+
+        }
+
+        isset($params['result']) ? $info['result'] = intval($params['result']) : false;
+        isset($params['request']) ? $info['request'] = trim($params['request']) : false;
+        isset($params['response']) ? $info['response'] = trim($params['response']) : false;
+        isset($params['httpcode']) ? $info['httpcode'] = trim($params['httpcode']) : false;
+
+        $info['createtime'] = time();
+
+        return $this->dao->addPush($info);
     }
 
     /**
@@ -79,11 +241,12 @@ class PushModel extends \BaseModel {
      *            int id 主键
      * @return array
      */
-    public function updatePushById($param, $id) {
+    public function updatePushById($param, $id)
+    {
         $result = false;
         // 自行添加要更新的字段,以下是age字段是样例
         if ($id) {
-            $info['age'] = intval($param['age']);
+            $info = $param;
             $result = $this->dao->updatePushById($info, $id);
         }
         return $result;

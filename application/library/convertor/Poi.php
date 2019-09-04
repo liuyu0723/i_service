@@ -74,39 +74,39 @@ class Convertor_Poi extends Convertor_Base
 
         foreach ($poiList as $poi) {
             $poiTemp = array();
-            $poiTemp['id'] = $poi['id'];
-            $poiTemp['name_lang1'] = $poi['name_lang1'];
-            $poiTemp['name_lang2'] = $poi['name_lang2'];
-            $poiTemp['name_lang3'] = $poi['name_lang3'];
-            $poiTemp['address_lang1'] = $poi['address_lang1'];
-            $poiTemp['address_lang2'] = $poi['address_lang2'];
-            $poiTemp['address_lang3'] = $poi['address_lang3'];
-            $poiTemp['tel'] = $poi['tel'];
-            $poiTemp['status'] = $poi['status'];
-            $poiTemp['hotelId'] = $poi['hotelid'];
-            $poiTemp['tagId'] = $poi['tagid'];
-            $poiTemp['tagName_lang1'] = $tagListNew[$poiTemp['tagId']]['titleLang1'];
-            $poiTemp['tagName_lang2'] = $tagListNew[$poiTemp['tagId']]['titleLang2'];
-            $poiTemp['tagName_lang3'] = $tagListNew[$poiTemp['tagId']]['titleLang3'];
-            $poiTemp['typeId'] = $poi['typeid'];
-            $poiTemp['typeName_lang1'] = $typeListNew[$poiTemp['typeId']]['titleLang1'];
-            $poiTemp['typeName_lang2'] = $typeListNew[$poiTemp['typeId']]['titleLang2'];
-            $poiTemp['typeName_lang3'] = $typeListNew[$poiTemp['typeId']]['titleLang3'];
-            $poiTemp['introduct_lang1'] = $poi['introduct_lang1'];
-            $poiTemp['introduct_lang2'] = $poi['introduct_lang2'];
-            $poiTemp['introduct_lang3'] = $poi['introduct_lang3'];
-            $poiTemp['detail_lang1'] = $poi['detail_lang1'];
-            $poiTemp['detail_lang2'] = $poi['detail_lang2'];
-            $poiTemp['detail_lang3'] = $poi['detail_lang3'];
-            $poiTemp['lat'] = $poi['lat'];
-            $poiTemp['lng'] = $poi['lng'];
-            $poiTemp['sort'] = $poi['sort'];
-            $poiTemp['pdf'] = $poi['pdf'];
-            $poiTemp['video'] = $poi['video'];
-            $poiTemp['pic'] = $poi['pic'];
-            $poiTemp['createTime'] = $poi['createtime'];
-            $poiTemp['updateTime'] = $poi['updatetime'];
-            $data['list'][] = $poiTemp;
+            $poiTemp ['id'] = $poi ['id'];
+            $poiTemp ['name_lang1'] = $poi ['name_lang1'];
+            $poiTemp ['name_lang2'] = $poi ['name_lang2'];
+            $poiTemp ['name_lang3'] = $poi ['name_lang3'];
+            $poiTemp ['address_lang1'] = $poi ['address_lang1'];
+            $poiTemp ['address_lang2'] = $poi ['address_lang2'];
+            $poiTemp ['address_lang3'] = $poi ['address_lang3'];
+            $poiTemp ['tel'] = $poi ['tel'];
+            $poiTemp ['status'] = $poi ['status'];
+            $poiTemp ['hotelId'] = $poi ['hotelid'];
+            $poiTemp ['tagId'] = $poi ['tagid'];
+            $poiTemp ['tagName_lang1'] = $tagListNew [$poiTemp ['tagId']] ['titleLang1'];
+            $poiTemp ['tagName_lang2'] = $tagListNew [$poiTemp ['tagId']] ['titleLang2'];
+            $poiTemp ['tagName_lang3'] = $tagListNew [$poiTemp ['tagId']] ['titleLang3'];
+            $poiTemp ['typeId'] = $poi ['typeid'];
+            $poiTemp ['typeName_lang1'] = $typeListNew [$poiTemp ['typeId']] ['titleLang1'];
+            $poiTemp ['typeName_lang2'] = $typeListNew [$poiTemp ['typeId']] ['titleLang2'];
+            $poiTemp ['typeName_lang3'] = $typeListNew [$poiTemp ['typeId']] ['titleLang3'];
+            $poiTemp ['introduct_lang1'] = $poi ['introduct_lang1'];
+            $poiTemp ['introduct_lang2'] = $poi ['introduct_lang2'];
+            $poiTemp ['introduct_lang3'] = $poi ['introduct_lang3'];
+            $poiTemp ['detail_lang1'] = $poi ['detail_lang1'];
+            $poiTemp ['detail_lang2'] = $poi ['detail_lang2'];
+            $poiTemp ['detail_lang3'] = $poi ['detail_lang3'];
+            $poiTemp ['lat'] = $poi ['lat'];
+            $poiTemp ['lng'] = $poi ['lng'];
+            $poiTemp ['sort'] = $poi ['sort'];
+            $poiTemp ['pdf'] = $poi ['pdf'];
+            $poiTemp ['video'] = $poi ['video'];
+            $poiTemp ['pic'] = $poi ['pic'];
+            $poiTemp ['createTime'] = $poi ['createtime'];
+            $poiTemp ['updateTime'] = $poi ['updatetime'];
+            $data ['list'] [] = $poiTemp;
         }
         $data['total'] = $poiCount;
         $data['page'] = $param['page'];
@@ -168,6 +168,22 @@ class Convertor_Poi extends Convertor_Base
         $data['createTime'] = $poi['createtime'];
         $data['updateTime'] = $poi['updatetime'];
         $data['status'] = $poi['status'];
+        return $data;
+    }
+
+
+    /**
+     * 获取首页广告列表
+     * @param array $poiList 列表
+     * @return array
+     */
+    public function getHomeAdvConvertor($poiList) {
+        $data = array('list' => array());
+        foreach ($poiList as $pois) {
+            $pois ['pic'] = $pois['pic'] ? Enum_Img::getPathByKeyAndType($pois['pic'], Enum_Img::PIC_TYPE_KEY_WIDTH750) : '';
+            $pois ['updatetime'] = $pois['updatetime'] ? date('Y-m-d H:i:s', $pois['updatetime']) : '';
+            $data ['list'] [] = $pois;
+        }
         return $data;
     }
 }

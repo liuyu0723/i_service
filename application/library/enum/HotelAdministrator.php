@@ -40,6 +40,14 @@ class Enum_HotelAdministrator
         ),
     );
 
+    private static $staffPermission = array(
+        1 => '机器人控制',
+        2 => '购物订单',
+        3 => '活动管理',
+        4 => '员工服务',
+        5 => '个人设置',
+    );
+
     /**
      * Department enum list
      *
@@ -71,7 +79,7 @@ class Enum_HotelAdministrator
     /**
      * Get the permission list
      *
-     * @param array $params
+     * @param int $type
      * @return array
      */
     public static function getPermission($type = self::PERMISSION_TYPE_BASE)
@@ -86,6 +94,14 @@ class Enum_HotelAdministrator
         } else {
             return self::$_permission[$type];
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStaffPermission()
+    {
+        return self::$staffPermission;
     }
 
     /**

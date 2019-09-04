@@ -41,6 +41,7 @@ class Convertor_Staff extends Convertor_Base
         $data['lname'] = $list['lname'];
         $data['hotel_list'] = $list['hotel_list'];
         $data['hotel_list_detail'] = $list['hotel_list_detail'];
+        $data['permission'] = $list['permission'];
         return $data;
     }
 

@@ -1,10 +1,12 @@
 <?php
 
-class Enum_System {
+class Enum_System
+{
 
     const RPC_REQUEST_PACKAGE = 'ota';
     const IAM_PACKAGE = 'iam';
     const GROUP_PACKAGE = 'ig';
+    const STAFF_PACKAGE = 'ig';
 
     const RPC_REQUEST_UA = "Iservice/1.0(iservice;)";
 
@@ -18,9 +20,8 @@ class Enum_System {
 
     const PIN_LENGTH = 6;
 
-    public static function notAdminPackage($package) {
-        return ($package != self::IAM_PACKAGE && $package != self::GROUP_PACKAGE);
+    public static function notAdminPackage($package)
+    {
+        return ($package != self::IAM_PACKAGE && $package != self::GROUP_PACKAGE && $package != self::STAFF_PACKAGE);
     }
 }
-
-?>

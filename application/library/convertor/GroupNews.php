@@ -87,6 +87,10 @@ class Convertor_GroupNews extends Convertor_Base
             $newTemp['link_lang2'] = $news['link_lang2'];
             $newTemp['link_lang3'] = $news['link_lang3'];
 
+            $newTemp['enable_lang1'] = $news['enable_lang1'];
+            $newTemp['enable_lang2'] = $news['enable_lang2'];
+            $newTemp['enable_lang3'] = $news['enable_lang3'];
+
             $newTemp ['status'] = $news ['status'];
             $newTemp ['tagId'] = $news ['tagid'];
             $newTemp ['tagName'] = $tagListNew [$newTemp ['tagId']];

@@ -41,6 +41,11 @@ class Convertor_Promotion extends Convertor_Base {
             $newTemp ['createtime'] = $news ['createtime'];
             $newTemp ['updatetime'] = $news ['updatetime'];
             $newTemp ['url'] = $news ['url'];
+
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $promotionCount;
@@ -85,6 +90,9 @@ class Convertor_Promotion extends Convertor_Base {
             $newTemp ['tagName_lang1'] = $tagListNew [$newTemp ['tagId']] ['titleLang1'];
             $newTemp ['tagName_lang2'] = $tagListNew [$newTemp ['tagId']] ['titleLang2'];
             $newTemp ['tagName_lang3'] = $tagListNew [$newTemp ['tagId']] ['titleLang3'];
+            $newTemp['enable_lang1'] = $news['enable_lang1'];
+            $newTemp['enable_lang2'] = $news['enable_lang2'];
+            $newTemp['enable_lang3'] = $news['enable_lang3'];
             $newTemp ['sort'] = $news ['sort'];
             $newTemp ['pdf'] = $news ['pdf'];
             $newTemp ['video'] = $news ['video'];
@@ -92,6 +100,11 @@ class Convertor_Promotion extends Convertor_Base {
             $newTemp ['createTime'] = $news ['createtime'];
             $newTemp ['updateTime'] = $news ['updatetime'];
             $newTemp ['url'] = $news ['url'];
+            
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $promotionCount;

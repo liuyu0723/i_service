@@ -498,10 +498,21 @@ class RobotModel extends \BaseModel
     public function updatePosition(int $hotelid){
         $result = array();
         $newPositionArray = $this->sourcePosition($hotelid);
+        $oldPositionArray = [];
+        $oldPositions = Position::where("hotelid", '=', $hotelid)->get();
+        foreach ($oldPositions as $oldPosition){
+            $oldPositionArray[] = $oldPosition->robot_position;
+        }
         if ($newPositionArray['errcode'] == 0) {
             $index = 0;
             $sql = '';
             foreach ($newPositionArray['data'] as $position) {
+                $findKey = array_search($position['name'], $oldPositionArray);
+                if ($findKey !== false){
+                    unset($oldPositionArray[$findKey]);
+                    continue;
+                }
+
                 if ($index % self::SQL_BATCH == 0) {
                     if ($sql != '') {
                         $result[] = substr($sql, 0, -2) . ";";
@@ -527,6 +538,11 @@ class RobotModel extends \BaseModel
                 if ($sql != '') {
                     $result[] = substr($sql, 0, -2) . ";";
                 }
+            }
+
+            if (count($oldPositionArray) > 0){
+                $deleteSql = sprintf("DELETE FROM robot_position WHERE robot_position IN (\" %s \")", implode('","', $oldPositionArray));
+                $result[] = $deleteSql;
             }
         }
         return $result;

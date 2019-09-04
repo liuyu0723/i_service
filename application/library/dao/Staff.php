@@ -3,9 +3,11 @@
 /**
  * 员工管理数据层
  */
-class Dao_Staff extends Dao_Base {
+class Dao_Staff extends Dao_Base
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -15,9 +17,37 @@ class Dao_Staff extends Dao_Base {
      * @param array $param
      * @return array
      */
-    public function getStaffList(array $param): array {
+    public function getStaffList(array $param): array
+    {
         $limit = $param['limit'] ? intval($param['limit']) : 0;
         $page = $this->getStart($param['page'], $limit);
+
+        $paramSql = $this->hundleParams($param);
+
+        $sql = "select hotel_staff.*, hotel_administrator.realname
+                FROM hotel_staff 
+                LEFT JOIN hotel_administrator ON 
+                hotel_staff.admin_id = hotel_administrator.id
+                {$paramSql['sql']} 
+                ORDER BY hotel_staff.id DESC";
+
+        if ($limit) {
+            $sql .= " limit {$page},{$limit}";
+        }
+        $result = $this->db->fetchAll($sql, $paramSql['case']);
+        return is_array($result) ? $result : array();
+    }
+
+    public function getStaffListCount(array $param): int
+    {
+        $paramSql = $this->hundleParams($param);
+        $sql = "select count(1) as count from hotel_staff {$paramSql['sql']}";
+        $result = $this->db->fetchAssoc($sql, $paramSql['case']);
+        return intval($result['count']);
+    }
+
+    public function hundleParams(array $param): array
+    {
 
         $whereSql = array();
         $whereCase = array();
@@ -47,6 +77,20 @@ class Dao_Staff extends Dao_Base {
             }
         }
 
+        if (isset($param['groupid'])) {
+            if (is_array($param['groupid'])) {
+                $whereSql[] = 'hotel_staff.groupid in (' . implode(',', $param['groupid']) . ')';
+            } else {
+                $whereSql[] = 'hotel_staff.groupid = ?';
+                $whereCase[] = $param['groupid'];
+            }
+        }
+
+        if (isset($param['name'])) {
+            $whereSql[] = 'hotel_staff.lname = ?';
+            $whereCase[] = $param['name'];
+        }
+
         if (isset($param['department_id'])) {
             if (is_array($param['department_id'])) {
                 $whereSql[] = 'hotel_administrator.department in (' . implode(',', $param['department_id']) . ')';
@@ -66,15 +110,10 @@ class Dao_Staff extends Dao_Base {
         }
 
         $whereSql = $whereSql ? ' where ' . implode(' and ', $whereSql) : '';
-
-        $sql = "select hotel_staff.*, hotel_administrator.realname from hotel_staff LEFT JOIN hotel_administrator ON 
-                hotel_staff.admin_id = hotel_administrator.id
-                {$whereSql}";
-        if ($limit) {
-            $sql .= " limit {$page},{$limit}";
-        }
-        $result = $this->db->fetchAll($sql, $whereCase);
-        return is_array($result) ? $result : array();
+        return array(
+            'sql' => $whereSql,
+            'case' => $whereCase
+        );
     }
 
     /**
@@ -84,7 +123,8 @@ class Dao_Staff extends Dao_Base {
      *            int id
      * @return array
      */
-    public function getStaffDetail(int $id): array {
+    public function getStaffDetail(int $id): array
+    {
         $result = array();
 
         if ($id) {
@@ -104,7 +144,8 @@ class Dao_Staff extends Dao_Base {
      *            string staffId
      * @return array
      */
-    public function getStaffDetailByStaffId($staffId) {
+    public function getStaffDetailByStaffId($staffId)
+    {
         $result = array();
 
         if ($staffId) {
@@ -120,13 +161,12 @@ class Dao_Staff extends Dao_Base {
     /**
      * 根据id更新hotel_staff
      *
-     * @param
-     *            array 需要更新的数据
-     * @param
-     *            int id
-     * @return array
+     * @param array $info
+     * @param int $id
+     * @return bool|number|string
      */
-    public function updateStaffById(array $info, int $id) {
+    public function updateStaffById(array $info, int $id)
+    {
         $result = false;
 
         if ($id) {
@@ -144,7 +184,8 @@ class Dao_Staff extends Dao_Base {
      *            array
      * @return int id
      */
-    public function addStaff(array $info) {
+    public function addStaff(array $info)
+    {
         $this->db->insert('hotel_staff', $info);
         return $this->db->lastInsertId();
     }

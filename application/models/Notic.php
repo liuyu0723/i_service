@@ -88,7 +88,12 @@ class NoticModel extends \BaseModel {
             isset($param['sort']) ? $info['sort'] = $param['sort'] : false;
             isset($param['pdf']) ? $info['pdf'] = $param['pdf'] : false;
             isset($param['pic']) ? $info['pic'] = $param['pic'] : false;
-            isset($param['video']) ? $info['video'] = $param['video'] : false;
+			isset($param['video']) ? $info['video'] = $param['video'] : false;
+			
+			isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
+            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
+			isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
+			
 			$result = $this->dao->updateNoticById ( $info, $id );
 		}
 		return $result;

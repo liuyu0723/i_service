@@ -40,6 +40,10 @@ class GroupNoticeController extends \BaseController
         $param['title_lang2'] = $this->getParamList('title_lang2');
         $param['title_lang3'] = $this->getParamList('title_lang3');
         $param['lang'] = trim($this->getParamList('lang', Enum_Lang::CHINESE));
+        if (!empty($this->getParamList('lang')) && $this->getParamList('lang') !== "all") {
+            $langEnable = GroupNoticeModel::ENABLE_LANG . Enum_Lang::getLangIndex($this->getParamList('lang'));
+            $param[$langEnable] = GroupNoticeModel::ENABLE;
+        }
         $this->getPageParam($param);
         $list = $this->model->getNoticList($param);
         $count = $this->model->getNoticCount($param);
@@ -93,6 +97,9 @@ class GroupNoticeController extends \BaseController
             $param ['link_lang1'] = $this->getParamList('link_lang1');
             $param ['link_lang2'] = $this->getParamList('link_lang2');
             $param ['link_lang3'] = $this->getParamList('link_lang3');
+            $param['enable_lang1'] = $this->getParamList('enable_lang1');
+            $param['enable_lang2'] = $this->getParamList('enable_lang2');
+            $param['enable_lang3'] = $this->getParamList('enable_lang3');
             $param ['tagid'] = $this->getParamList('tagid');
             $param ['sort'] = $this->getParamList('sort');
             $param ['pdf'] = $this->getParamList('pdf');
@@ -125,6 +132,9 @@ class GroupNoticeController extends \BaseController
         $param ['link_lang1'] = $this->getParamList('link_lang1');
         $param ['link_lang2'] = $this->getParamList('link_lang2');
         $param ['link_lang3'] = $this->getParamList('link_lang3');
+        $param['enable_lang1'] = $this->getParamList('enable_lang1');
+        $param['enable_lang2'] = $this->getParamList('enable_lang2');
+        $param['enable_lang3'] = $this->getParamList('enable_lang3');
         $param ['tagid'] = $this->getParamList('tagid');
         $param ['sort'] = intval($this->getParamList('sort'));
         $param ['pdf'] = trim($this->getParamList('pdf'));

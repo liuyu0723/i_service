@@ -39,11 +39,7 @@ class PromotionController extends \BaseController
         if (is_null($param['status'])) {
             $param['status'] = 1;
         }
-
-        if (Enum_System::notAdminPackage($this->package)) {
-            $param['status'] = 1;
-        }
-        $param['title'] = $this->getParamList('title');
+        $param ['title'] = $this->getParamList('title');
         $this->getPageParam($param);
         $promotionList = $this->model->getPromotionList($param);
         $promotionCount = $this->model->getPromotionCount($param);
@@ -86,21 +82,21 @@ class PromotionController extends \BaseController
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
-            $param['hotelid'] = $this->getParamList('hotelid');
-            $param['url'] = $this->getParamList('url');
-            $param['title_lang1'] = $this->getParamList('title_lang1');
-            $param['title_lang2'] = $this->getParamList('title_lang2');
-            $param['title_lang3'] = $this->getParamList('title_lang3');
-            $param['article_lang1'] = $this->getParamList('article_lang1');
-            $param['article_lang2'] = $this->getParamList('article_lang2');
-            $param['article_lang3'] = $this->getParamList('article_lang3');
-            $param['tagid'] = $this->getParamList('tagid');
-            $param['status'] = $this->getParamList('status');
-            $param['sort'] = $this->getParamList('sort');
-            $param['pdf'] = $this->getParamList('pdf');
-            $param['video'] = $this->getParamList('video');
-            $param['pic'] = $this->getParamList('pic');
-            $param['updatetime'] = time();
+            $param ['hotelid'] = $this->getParamList('hotelid');
+            $param ['url'] = $this->getParamList('url');
+            $param ['title_lang1'] = $this->getParamList('title_lang1');
+            $param ['title_lang2'] = $this->getParamList('title_lang2');
+            $param ['title_lang3'] = $this->getParamList('title_lang3');
+            $param ['article_lang1'] = $this->getParamList('article_lang1');
+            $param ['article_lang2'] = $this->getParamList('article_lang2');
+            $param ['article_lang3'] = $this->getParamList('article_lang3');
+            $param ['tagid'] = $this->getParamList('tagid');
+            $param ['status'] = $this->getParamList('status');
+            $param ['sort'] = $this->getParamList('sort');
+            $param ['pdf'] = $this->getParamList('pdf');
+            $param ['video'] = $this->getParamList('video');
+            $param ['pic'] = $this->getParamList('pic');
+            $param ['updatetime'] = time();
             $data = $this->model->updatePromotionById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -119,19 +115,19 @@ class PromotionController extends \BaseController
     public function addPromotionAction()
     {
         $param = array();
-        $param['hotelid'] = $this->getParamList('hotelid');
-        $param['url'] = $this->getParamList('url');
-        $param['title_lang1'] = $this->getParamList('title_lang1');
-        $param['title_lang2'] = $this->getParamList('title_lang2');
-        $param['title_lang3'] = $this->getParamList('title_lang3');
-        $param['tagid'] = $this->getParamList('tagid');
-        $param['status'] = $this->getParamList('status');
-        $param['updatetime'] = time();
-        $param['createtime'] = time();
-        $param['sort'] = intval($this->getParamList('sort'));
-        $param['pdf'] = trim($this->getParamList('pdf'));
-        $param['video'] = trim($this->getParamList('video'));
-        $param['pic'] = trim($this->getParamList('pic'));
+        $param ['hotelid'] = $this->getParamList('hotelid');
+        $param ['url'] = $this->getParamList('url');
+        $param ['title_lang1'] = $this->getParamList('title_lang1');
+        $param ['title_lang2'] = $this->getParamList('title_lang2');
+        $param ['title_lang3'] = $this->getParamList('title_lang3');
+        $param ['tagid'] = $this->getParamList('tagid');
+        $param ['status'] = $this->getParamList('status');
+        $param ['updatetime'] = time();
+        $param ['createtime'] = time();
+        $param ['sort'] = intval($this->getParamList('sort'));
+        $param ['pdf'] = trim($this->getParamList('pdf'));
+        $param ['video'] = trim($this->getParamList('video'));
+        $param ['pic'] = trim($this->getParamList('pic'));
         $data = $this->model->addPromotion($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);

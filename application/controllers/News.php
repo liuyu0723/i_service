@@ -38,6 +38,10 @@ class NewsController extends \BaseController {
             $param ['status'] = $this->getParamList('status');
         }
         $param ['title'] = $this->getParamList('title');
+        if (!empty($this->getParamList('lang'))) {
+            $langEnable = NewsModel::ENABLE_LANG . Enum_Lang::getLangIndex($this->getParamList('lang'), Enum_Lang::CHINESE);
+            $param[$langEnable] = NewsModel::ENABLE;
+        }
         $this->getPageParam($param);
         $newsList = $this->model->getNewsList($param);
         $newsCount = $this->model->getNewsCount($param);
@@ -91,7 +95,15 @@ class NewsController extends \BaseController {
             $param ['pdf'] = $this->getParamList('pdf');
             $param ['video'] = $this->getParamList('video');
             $param ['pic'] = $this->getParamList('pic');
+            $param['enable_lang1'] = $this->getParamList('enable_lang1');
+            $param['enable_lang2'] = $this->getParamList('enable_lang2');
+            $param['enable_lang3'] = $this->getParamList('enable_lang3');
             $param ['updatetime'] = time();
+
+            $param ['homeShow'] = trim($this->getParamList('homeShow'));
+            $param ['startTime'] = trim($this->getParamList('startTime'));
+            $param ['endTime'] = trim($this->getParamList('endTime'));
+
             $data = $this->model->updateNewsById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -121,6 +133,14 @@ class NewsController extends \BaseController {
         $param ['pdf'] = trim($this->getParamList('pdf'));
         $param ['video'] = trim($this->getParamList('video'));
         $param ['pic'] = trim($this->getParamList('pic'));
+        $param['enable_lang1'] = $this->getParamList('enable_lang1', NewsModel::ENABLE);
+        $param['enable_lang2'] = $this->getParamList('enable_lang2', NewsModel::ENABLE);
+        $param['enable_lang3'] = $this->getParamList('enable_lang3', NewsModel::ENABLE);
+
+        $param ['homeShow'] = trim($this->getParamList('homeShow'));
+        $param ['startTime'] = trim($this->getParamList('startTime'));
+        $param ['endTime'] = trim($this->getParamList('endTime'));
+
         $data = $this->model->addNews($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);

@@ -35,11 +35,28 @@ class StaffModel extends \BaseModel
         $param['id'] ? $paramList['id'] = $param['id'] : false;
         $param['staffid'] ? $paramList['staffid'] = $param['staffid'] : false;
         $param['hotelid'] ? $paramList['hotelid'] = $param['hotelid'] : false;
+        $param['groupid'] ? $paramList['groupid'] = $param['groupid'] : false;
+        $param['name'] ? $paramList['name'] = $param['name'] : false;
         $param['department_id'] ? $paramList['department_id'] = $param['department_id'] : false;
         isset($param['level']) ? $paramList['level'] = $param['level'] : false;
         $paramList['limit'] = $param['limit'];
         $paramList['page'] = $param['page'];
         return $this->dao->getStaffList($paramList);
+    }
+
+
+    public function getStaffListCount(array $param)
+    {
+        $param['id'] ? $paramList['id'] = $param['id'] : false;
+        $param['staffid'] ? $paramList['staffid'] = $param['staffid'] : false;
+        $param['hotelid'] ? $paramList['hotelid'] = $param['hotelid'] : false;
+        $param['groupid'] ? $paramList['groupid'] = $param['groupid'] : false;
+        $param['name'] ? $paramList['name'] = $param['name'] : false;
+        $param['department_id'] ? $paramList['department_id'] = $param['department_id'] : false;
+        isset($param['level']) ? $paramList['level'] = $param['level'] : false;
+        $paramList['limit'] = $param['limit'];
+        $paramList['page'] = $param['page'];
+        return $this->dao->getStaffListCount($paramList);
     }
 
     /**
@@ -88,6 +105,7 @@ class StaffModel extends \BaseModel
         $result = false;
         if ($id) {
             $param['lname'] ? $info['lname'] = $param['lname'] : false;
+            intval($param['staffid']) ? $info['staffid'] = intval($param['staffid']) : false;
             intval($param['hotelid']) ? $info['hotelid'] = intval($param['hotelid']) : false;
             intval($param['groupid']) ? $info['groupid'] = intval($param['groupid']) : false;
             $info['lastlogintime'] = time();
@@ -96,6 +114,7 @@ class StaffModel extends \BaseModel
             $param['identity'] ? $info['identity'] = $param['identity'] : false;
             $param['staff_web_hotel_id'] ? $info['staff_web_hotel_id'] = intval($param['staff_web_hotel_id']) : false;
             $param['admin_id'] ? $info['admin_id'] = intval($param['admin_id']) : false;
+            $param['hotel_list'] ? $info['hotel_list'] = str_replace(',99', '', str_replace('99,', '', trim($param['hotel_list']))) : false;
             if (!is_null($param['schedule'])) {
                 $info['schedule'] = trim($param['schedule']);
                 unset($info['lastlogintime']);
@@ -106,6 +125,15 @@ class StaffModel extends \BaseModel
                 unset($info['lastlogintime']);
                 unset($info['lastloginip']);
             }
+            if (!is_null($param['permission'])) {
+                $info['permission'] = trim($param['permission']);
+                unset($info['lastlogintime']);
+                unset($info['lastloginip']);
+            }
+
+
+
+
             $result = $this->dao->updateStaffById($info, $id);
         }
         return $result;
@@ -121,7 +149,6 @@ class StaffModel extends \BaseModel
     public function addStaff($param)
     {
         $info['lname'] = $param['lname'];
-        $info['hotelid'] = intval($param['hotelid']);
         $info['groupid'] = intval($param['groupid']);
         $info['staffid'] = strval($param['staffid']);
         $info['createtime'] = time();
@@ -130,6 +157,29 @@ class StaffModel extends \BaseModel
         $info['platform'] = intval($param['platform']);
         $info['identity'] = $param['identity'];
         $info['admin_id'] = intval($param['admin_id']);
+        return $this->dao->addStaff($info);
+    }
+
+
+    /**
+     * Staff新增信息
+     *
+     * @param
+     *            array param 需要增加的信息
+     * @return int
+     */
+    public function addStaffWithHotelList($param)
+    {
+        $info['lname'] = $param['lname'];
+        $info['groupid'] = intval($param['groupid']);
+        $info['staffid'] = strval($param['staffid']);
+        $info['createtime'] = time();
+        $info['lastlogintime'] = time();
+        $info['lastloginip'] = Util_Tools::ipton(Util_Http::getIP());
+        $info['platform'] = intval($param['platform']);
+        $info['identity'] = $param['identity'];
+        $info['admin_id'] = intval($param['admin_id']);
+        $info['hotel_list'] = $param['hotel_list'];
         return $this->dao->addStaff($info);
     }
 
@@ -179,7 +229,7 @@ class StaffModel extends \BaseModel
      * @param array $param
      * @return array
      */
-    public function loginAction($param)
+    public function login($param)
     {
         if (empty($param['lname']) || empty($param['pwd'])) {
             $this->throwException('登录信息不正确', 2);
@@ -197,6 +247,14 @@ class StaffModel extends \BaseModel
         // 获取用户信息
         $getStaffInfo = $this->getStaffDetailByStaffId($staffIdInfo['staffId']);
         $userId = $getStaffInfo['id'];
+        if (empty($userId)) {
+            $this->throwException('员工未配置，请联系管理员添加', 5);
+        } else {
+            $hotelList = explode(",", $getStaffInfo['hotel_list']);
+            if (!empty($param['hotelid']) && !in_array($param['hotelid'], $hotelList)) {
+                $this->throwException('员工无对应物业权限，请选择有权限的物业', 5);
+            }
+        }
 
         $newStaffInfo = array(
             'groupid' => $param['groupid'],
@@ -212,24 +270,18 @@ class StaffModel extends \BaseModel
             $newStaffInfo['platform'] = intval($param['platform']);
         }
         $newStaffInfo['admin_id'] = $this->getAdminId(intval($newStaffInfo['groupid']), $staffIdInfo['staffId']);
-        if ($userId) {
-            // 更新用户数据
-            if (!$this->updateStaffById($newStaffInfo, $userId)) {
-                $this->throwException('登录失败，请重试', 5);
-            }
-        } else {
-            // 新建用户
-            $newStaffInfo['staffid'] = $staffIdInfo['staffId'];
-            $userId = $this->addStaff($newStaffInfo);
-            if (!$userId) {
-                $this->throwException('登录失败，请重试', 5);
-            }
+        if (!$this->updateStaffById($newStaffInfo, $userId)) {
+            $this->throwException('登录失败，请重试', 5);
         }
+
         $userInfo = $this->getStaffDetail($userId);
         if (!empty($userInfo['hotel_list'])) {
             $userInfo['hotel_list'] = explode(',', $userInfo['hotel_list']);
             $hotelModel = new HotelListModel();
-            $hotelList = $hotelModel->getHotelListList(array('id' => $userInfo['hotel_list']));
+            $hotelList = $hotelModel->getHotelListList(array(
+                'id' => $userInfo['hotel_list'],
+                'groupid' => $param['groupid'],
+            ));
         } else {
             $userInfo['hotel_list'] = array();
             $hotelList = array();
@@ -244,9 +296,142 @@ class StaffModel extends \BaseModel
             );
             $userInfo['hotel_list_detail'][] = $detail;
         }
+
+        if (empty($userInfo['permission'])) {
+            $userInfo['permission'] = array();
+        } else {
+            $userInfo['permission'] = explode(',', $userInfo['permission']);
+        }
+
         $userInfo['token'] = Auth_Login::makeToken($userId, Auth_Login::STAFF_MARK, 30 * 24 * 3600);
         return $userInfo;
     }
+
+
+
+    /**
+     * app员工登录
+     * 
+     * 1. 添加一个新hotel到hotel_list
+     * ID = 99，
+     * GroupId = 调用appLogin时发送的GroupId
+     * Name = 新员工登录
+     * 2. 调用appLogin登录
+     * 登录时酒店必须选择 '新员工登录酒店'
+     * @param array $param
+     * @return array
+     */
+    public function appLogin($param)
+    {
+        if (empty($param['lname']) || empty($param['pwd'])) {
+            $this->throwException('登录信息不正确', 2);
+        }
+        if (empty($param['groupid'])) {
+            $this->throwException('缺少集团参数', 3);
+        }
+
+        if (empty($param['hotelid'])) {
+            $this->throwException('缺少酒店参数', 3);
+        }
+
+        // 获取Oid
+        $staffIdInfo = $this->getStaffIdInfo($param);
+        if (empty($staffIdInfo['staffId'])) {
+            $this->throwException('账号密码错误，登录失败', 4);
+        }
+
+        $_gsmStaffId = $staffIdInfo['staffId'];
+        // 获取用户信息
+        $getStaffInfo = $this->getStaffDetailByStaffId($staffIdInfo['staffId']);
+        $userId = $getStaffInfo['id'];
+        if (empty($userId)) {
+
+            if (intval($param['hotelid']) != 99) {
+                $this->throwException('员工无对应物业权限，请选择有权限的物业', 5);
+            }
+
+            if ($_gsmStaffId > 0) {
+                //1. 添加 staff 到iservice数据库
+                $paramsForAddStaff = array(
+                    'lname' => $param['lname'],
+                    'groupid' => $param['groupid'],
+                    'staffid' => $_gsmStaffId,
+                    'platform' => 1,
+                    'identity' => self::STAFF_WEB_IDENTIFY,
+                    'admin_id' => 0,
+                    'hotel_list' => '99'  //员工临时登录物业
+                );
+                //1.1. 添加 staff 到iservice数据库
+                $newStaffId = $this->addStaffWithHotelList($paramsForAddStaff);
+                //2. 检查 add staff 返回值
+                if ($newStaffId <= 0) {
+                    $this->throwException('添加新员工失败, 请重试', 5);
+                }
+                //3. 从新调用 app login 服务
+                else {
+                    return $this->appLogin($param);
+                }
+            }
+        } else {
+            $hotelList = explode(",", $getStaffInfo['hotel_list']);
+            if (!empty($param['hotelid']) && !in_array($param['hotelid'], $hotelList)) {
+                $this->throwException('员工无对应物业权限，请选择有权限的物业', 5);
+            }
+        }
+
+        $newStaffInfo = array(
+            'groupid' => $param['groupid'],
+            'lname' => $param['lname'],
+            'identity' => trim($param['identity'])
+        );
+        if (!empty($param['hotelid'])) {
+            $newStaffInfo['hotelid'] = intval($param['hotelid']);
+        }
+
+        //don't change platform when login from web
+        if ($newStaffInfo['identity'] != self::STAFF_WEB_IDENTIFY) {
+            $newStaffInfo['platform'] = intval($param['platform']);
+        }
+        $newStaffInfo['admin_id'] = $this->getAdminId(intval($newStaffInfo['groupid']), $staffIdInfo['staffId']);
+        if (!$this->updateStaffById($newStaffInfo, $userId)) {
+            $this->throwException('登录失败，请重试', 5);
+        }
+
+        $userInfo = $this->getStaffDetail($userId);
+        if (!empty($userInfo['hotel_list'])) {
+            $userInfo['hotel_list'] = explode(',', $userInfo['hotel_list']);
+            $hotelModel = new HotelListModel();
+            $hotelList = $hotelModel->getHotelListList(array(
+                'id' => $userInfo['hotel_list'],
+                'groupid' => $param['groupid'],
+            ));
+        } else {
+            $userInfo['hotel_list'] = array();
+            $hotelList = array();
+        }
+        $userInfo['hotel_list_detail'] = array();
+        foreach ($hotelList as $hotel) {
+            $detail = array(
+                'id' => $hotel['id'],
+                'name_lang1' => $hotel['name_lang1'],
+                'name_lang2' => $hotel['name_lang2'],
+                'name_lang3' => $hotel['name_lang3'],
+            );
+            $userInfo['hotel_list_detail'][] = $detail;
+        }
+
+        if (empty($userInfo['permission'])) {
+            $userInfo['permission'] = array();
+        } else {
+            $userInfo['permission'] = explode(',', $userInfo['permission']);
+        }
+
+        $userInfo['token'] = Auth_Login::makeToken($userId, Auth_Login::STAFF_MARK, 30 * 24 * 3600);
+        return $userInfo;
+    }
+
+
+
 
     /**
      * Staff login with iService auth
@@ -296,7 +481,7 @@ class StaffModel extends \BaseModel
      */
     public function getAdminId(int $groupId, string $staffId): int
     {
-        if(!in_array($groupId, self::GROUP_LOGIN_SERVICE)){
+        if (!in_array($groupId, self::GROUP_LOGIN_SERVICE)) {
             return 0;
         }
         preg_match('/_(\d+)$/', $staffId, $matches);

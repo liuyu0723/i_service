@@ -40,6 +40,11 @@ class Convertor_News extends Convertor_Base {
             $newTemp ['tagName'] = $tagListNew [$newTemp ['tagId']];
             $newTemp ['createtime'] = $news ['createtime'];
             $newTemp ['updatetime'] = $news ['updatetime'];
+
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $newsCount;
@@ -90,6 +95,14 @@ class Convertor_News extends Convertor_Base {
             $newTemp ['pic'] = $news ['pic'];
             $newTemp ['createTime'] = $news ['createtime'];
             $newTemp ['updateTime'] = $news ['updatetime'];
+            $newTemp['enable_lang1'] = $news['enable_lang1'];
+            $newTemp['enable_lang2'] = $news['enable_lang2'];
+            $newTemp['enable_lang3'] = $news['enable_lang3'];
+
+            $newTemp ['homeShow'] = $news ['homeShow'];
+            $newTemp ['startTime'] = date('Y-m-d H:i:s', $news ['startTime']);
+            $newTemp ['endTime'] = date('Y-m-d H:i:s', $news ['endTime']);
+
             $data ['list'] [] = $newTemp;
         }
         $data ['total'] = $newsCount;

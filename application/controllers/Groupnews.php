@@ -43,6 +43,14 @@ class GroupNewsController extends \BaseController
         $param ['title_lang1'] = $this->getParamList('title_lang1');
         $param ['title_lang2'] = $this->getParamList('title_lang2');
         $param['langIndex'] = Enum_Lang::getLangIndex($this->getParamList('lang', Enum_Lang::CHINESE));
+        $lang = $this->getParamList('lang');
+        if ($lang !== 'all' && !is_null($lang)) {
+            $key = Enum_Lang::getLangIndex($lang);
+            if ($key > 0) {
+                $langEnable = GroupNewsModel::ENABLE_LANG . $key;
+                $param[$langEnable] = GroupNewsModel::ENABLE;
+            }
+        }
         $this->getPageParam($param);
         $newsList = $this->model->getNewsList($param);
         $newsCount = $this->model->getNewsCount($param);
@@ -99,6 +107,9 @@ class GroupNewsController extends \BaseController
             $param ['pdf'] = $this->getParamList('pdf');
             $param ['video'] = $this->getParamList('video');
             $param ['pic'] = $this->getParamList('pic');
+            $param['enable_lang1'] = $this->getParamList('enable_lang1');
+            $param['enable_lang2'] = $this->getParamList('enable_lang2');
+            $param['enable_lang3'] = $this->getParamList('enable_lang3');
             $param ['updatetime'] = time();
             $data = $this->model->updateNewsById($param, $id);
             $data = $this->convertor->statusConvertor($data);
@@ -132,6 +143,9 @@ class GroupNewsController extends \BaseController
         $param ['pdf'] = trim($this->getParamList('pdf'));
         $param ['video'] = trim($this->getParamList('video'));
         $param ['pic'] = trim($this->getParamList('pic'));
+        $param['enable_lang1'] = $this->getParamList('enable_lang1', GroupNewsModel::ENABLE);
+        $param['enable_lang2'] = $this->getParamList('enable_lang2', GroupNewsModel::ENABLE);
+        $param['enable_lang3'] = $this->getParamList('enable_lang3', GroupNewsModel::ENABLE);
         $data = $this->model->addNews($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);

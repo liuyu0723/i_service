@@ -5,8 +5,9 @@
  */
 class Convertor_Activity extends Convertor_Base {
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct($isAdmin = false)
+    {
+        parent::__construct($isAdmin);
     }
 
     /**
@@ -33,6 +34,8 @@ class Convertor_Activity extends Convertor_Base {
             $activityTemp ['id'] = $activity ['id'];
             $activityTemp ['title'] = $this->handlerMultiLang('title', $activity);
             $activityTemp ['article'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('article', $activity));
+            $activityTemp ['header'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('header', $activity));
+            $activityTemp ['footer'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('footer', $activity));
             $activityTemp ['tagId'] = $activity ['tagid'];
             $activityTemp ['fromdate'] = $activity ['fromdate'];
             $activityTemp ['todate'] = $activity ['todate'];
@@ -91,6 +94,12 @@ class Convertor_Activity extends Convertor_Base {
             $activityTemp ['article_lang1'] = $value ['article_lang1'];
             $activityTemp ['article_lang2'] = $value ['article_lang2'];
             $activityTemp ['article_lang3'] = $value ['article_lang3'];
+            $activityTemp ['header_lang1'] = $value ['header_lang1'];
+            $activityTemp ['header_lang2'] = $value ['header_lang2'];
+            $activityTemp ['header_lang3'] = $value ['header_lang3'];
+            $activityTemp ['footer_lang1'] = $value ['footer_lang1'];
+            $activityTemp ['footer_lang2'] = $value ['footer_lang2'];
+            $activityTemp ['footer_lang3'] = $value ['footer_lang3'];
             $activityTemp ['pic'] = $value ['pic'];
             $activityTemp ['fromdate'] = $value ['fromdate'];
             $activityTemp ['todate'] = $value ['todate'];
@@ -111,6 +120,11 @@ class Convertor_Activity extends Convertor_Base {
             $activityTemp ['fromdate'] = $value ['fromdate'];
             $activityTemp ['todate'] = $value ['todate'];
             $activityTemp ['count'] = $value ['count'];
+
+            $activityTemp ['homeShow'] = $value ['homeShow'];
+            $activityTemp ['startTime'] = date('Y-m-d H:i:s', $value ['startTime']);
+            $activityTemp ['endTime'] = date('Y-m-d H:i:s', $value ['endTime']);
+
             $data ['list'] [] = $activityTemp;
         }
         $data ['total'] = $count;
@@ -118,5 +132,74 @@ class Convertor_Activity extends Convertor_Base {
         $data ['limit'] = $param ['limit'];
         $data ['nextPage'] = Util_Tools::getNextPage($data ['page'], $data ['limit'], $data ['total']);
         return $data;
+    }
+
+
+    public function PhotoList(array $data):array {
+        $result = array();
+        if ($this->isAdmin) {
+            $result['list'] = $data['data'];
+            $result['total'] = $data['total'];
+            $result['page'] = $data['current_page'];
+            $result['limit'] = $data['per_page'];
+            $result['nextPage'] = Util_Tools::getNextPage($result['page'], $result['limit'], $result['total']);
+        } else {
+
+            foreach ($data['data'] as $item) {
+                $tmp = array();
+                $tmp['id'] = $item['id'];
+                $tmp['pic'] = Enum_Img::getPathByKeyAndType($item['pic']);
+                $tmp['status'] = $item['status'];
+                $tmp['sort'] = $item['sort'];
+                $tmp['createtime'] = $item['createtime'];
+                $result['list'][] = $tmp;
+            }
+            $result['total'] = $data['total'];
+            $result['page'] = $data['current_page'];
+            $result['limit'] = $data['per_page'];
+            $result['nextPage'] = Util_Tools::getNextPage($result['page'], $result['limit'], $result['total']);
+        }
+
+        return $result;
+    }
+
+    public function getActivityDetail(array $data, array $photos) : array
+    {
+        $result = array();
+        $result['id'] = $data['id'];
+        $result['title'] = $this->handlerMultiLang('title', $data);
+        $result['article'] = Enum_Img::getPathByKeyAndType($this->handlerMultiLang('article', $data));
+
+        if(!empty($this->handlerMultiLang('header', $data))){
+            $result['header'] = file_get_contents(Enum_Img::getPathByKeyAndType($this->handlerMultiLang('header', $data)));
+        } else {
+            $result['header'] = null;
+        }
+        if(!empty($this->handlerMultiLang('footer', $data))){
+            $result['footer'] = file_get_contents(Enum_Img::getPathByKeyAndType($this->handlerMultiLang('footer', $data)));
+        } else {
+            $result['footer'] = null;
+        }
+
+        $result['status'] = $data['status'];
+
+        $result['createtime'] = date("Y-m-d H:i:s", $data['createtime']);
+        $result['updatetime'] = date("Y-m-d H:i:s", $data['updatetime']);
+        $result['pic'] = Enum_Img::getPathByKeyAndType($data['pic']);
+        $result['fromdate'] =  date("Y-m-d", $data['fromdate']);;
+        $result['todate'] =  date("Y-m-d", $data['todate']);;
+
+        $result['photos'] = array();
+        foreach ($photos as $photo){
+            $tmp = array();
+            $tmp['id'] = $photo['id'];
+            $tmp['pic'] = Enum_Img::getPathByKeyAndSize($photo['pic']);
+            $tmp['download'] = Enum_Img::getPathByKeyAndType($photo['pic']);
+            $tmp['createtime'] = $photo['createtime'];
+
+            $result['photos'][] = $tmp;
+        }
+
+        return $result;
     }
 }

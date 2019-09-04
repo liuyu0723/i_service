@@ -132,4 +132,90 @@ class Dao_Poi extends Dao_Base {
         $this->db->insert('hotel_poi', $info);
         return $this->db->lastInsertId();
     }
+
+    /**
+     * 获取首页广告列表
+     *
+     * @return Json
+     */
+    public function getHomeAdv(array $param): array {
+        $sql = "select * from(
+                    select id,
+                    typeid,
+                    pic,
+                    name_lang1,
+                    introduct_lang1,
+                    name_lang2,
+                    introduct_lang2,
+                    updatetime,
+                    '1' as type,
+                    hotelid,
+                    homeShow,
+                    startTime,
+                    endTime from hotel_poi
+                    UNION ALL
+                    select id,
+                    '' as typeid,
+                    pic,
+                    title_lang1 'name_lang1',
+                    '' as introduct_lang1,
+                    title_lang2 'name_lang2',
+                    '' as introduct_lang2,
+                    updatetime,
+                    '2' as type,
+                    hotelid,
+                    homeShow,
+                    startTime,
+                    endTime from hotel_promotion
+                    UNION ALL
+                    select id,
+                    '' as typeid,
+                    pic,
+                    title_lang1 'name_lang1',
+                    '' as introduct_lang1,
+                    title_lang2 'name_lang2' ,
+                    '' as introduct_lang2,
+                    updatetime,
+                    '3' as type,
+                    hotelid,
+                    homeShow,
+                    startTime,
+                    endTime from hotel_news
+                    UNION ALL
+                    select id,
+                    '' as typeid,
+                    pic,
+                    title_lang1 'name_lang1',
+                    '' as introduct_lang1,
+                    title_lang2 'name_lang2' ,
+                    '' as introduct_lang2,
+                    updatetime,
+                    '4' as type,
+                    hotelid,
+                    homeShow,
+                    startTime,
+                    endTime from hotel_activity
+                    UNION ALL
+                    select id,
+                    '' as typeid,
+                    pic,
+                    title_lang1 'name_lang1',
+                    '' as introduct_lang1,
+                    title_lang2 'name_lang2' ,
+                    '' as introduct_lang2,
+                    updatetime,
+                    '5' as type,
+                    hotelid,
+                    homeShow,
+                    startTime,
+                    endTime from hotel_notic) as t1
+                where hotelid=? and homeShow = 1 and startTime <=? and endTime >=?";
+		$result = $this->db->fetchAll ( $sql, array(
+            $param['hotelid'],
+            $param['today'],
+            $param['today']
+        ));
+		return is_array ( $result ) ? $result : array ();
+    }
+    
 }

@@ -1,9 +1,7 @@
 <?php
+use Illuminate\Database\Capsule\Manager as DB;
 
-/**
- * Class ActivityModel
- * 活动管理Model
- */
+
 class ActivityModel extends \BaseModel {
 
     private $dao;
@@ -91,9 +89,20 @@ class ActivityModel extends \BaseModel {
             isset($param['article_lang1']) ? $info['article_lang1'] = $param['article_lang1'] : false;
             isset($param['article_lang2']) ? $info['article_lang2'] = $param['article_lang2'] : false;
             isset($param['article_lang3']) ? $info['article_lang3'] = $param['article_lang3'] : false;
+            isset($param['header_lang1']) ? $info['header_lang1'] = $param['header_lang1'] : false;
+            isset($param['header_lang2']) ? $info['header_lang2'] = $param['header_lang2'] : false;
+            isset($param['header_lang3']) ? $info['header_lang3'] = $param['header_lang3'] : false;
+            isset($param['footer_lang1']) ? $info['footer_lang1'] = $param['footer_lang1'] : false;
+            isset($param['footer_lang2']) ? $info['footer_lang2'] = $param['footer_lang2'] : false;
+            isset($param['footer_lang3']) ? $info['footer_lang3'] = $param['footer_lang3'] : false;
             isset($param['sort']) ? $info['sort'] = $param['sort'] : false;
             isset($param['pdf']) ? $info['pdf'] = $param['pdf'] : false;
             isset($param['video']) ? $info['video'] = $param['video'] : false;
+
+            isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
+            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
+            isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
+
             $info['updatetime'] = time();
             $result = $this->dao->updateActivityById($info, $id);
         }
@@ -124,6 +133,62 @@ class ActivityModel extends \BaseModel {
         isset($param['video']) ? $info['video'] = $param['video'] : false;
         $info['createtime'] = time();
         $info['updatetime'] = $info['createtime'];
+
+        isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
+        isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
+        isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
+        
         return $this->dao->addActivity($info);
     }
+
+    public function addPhoto($params) : int
+    {
+        if (empty($params['activity_id']) || empty($params['pic']) || empty($params['hotelid'])) {
+            $this->throwException("lack param[activity_id, pic]", 1);
+        }
+        $model = new Eloquent_ActivityPhoto();
+        $model->hotelid = $params['hotelid'];
+        $model->activity_id = $params['activity_id'];
+        $model->pic = $params['pic'];
+        $model->status = $params['status'];
+        $model->sort = $params['sort'];
+        $model->save();
+
+        return $model->id;
+
+    }
+
+    public function updatePhotoById(array $params, int $id)
+    {
+        if (empty($id)) {
+            $this->throwException("lack param[id]", 1);
+        }
+        $info = array();
+        is_null($params['activity_id']) ? false : $info['activity_id'] = intval($params['activity_id']);
+        is_null($params['pic']) ? false : $info['pic'] = trim($params['pic']);
+        is_null($params['sort']) ? false : $info['sort'] = intval($params['sort']);
+        is_null($params['status']) ? false : $info['status'] = intval($params['status']);
+
+        $result = DB::table('hotel_activity_photos')->where('id', '=', $id)->update($info);
+        return $result;
+    }
+
+    public function getPhotoList(array $params)
+    {
+        $paramList = array();
+        is_null($params['hotelid']) ? false : $paramList['hotelid'] = intval($params['hotelid']);
+        is_null($params['activity_id']) ? false : $paramList['activity_id'] = intval($params['activity_id']);
+        is_null($params['status']) ? false : $paramList['status'] = intval($params['status']);
+
+        $query = Eloquent_ActivityPhoto::where($paramList)->orderBy('sort', 'DESC')->orderBy('id', 'DESC');
+        if ($params['limit'] > 0) {
+            $data = $query->paginate($params['limit'], ['*'], 'page', $params['page'])->toArray();
+        } else {
+            $data = $query->get()->toArray();
+        }
+
+        return $data;
+    }
+
+
 }

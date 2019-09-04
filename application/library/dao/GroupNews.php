@@ -74,6 +74,18 @@ class Dao_GroupNews extends Dao_Base {
             $whereSql[] = 'title_lang2 = ?';
             $whereCase[] = $param['title_lang2'];
         }
+        if (isset($param['enable_lang1'])) {
+            $whereSql[] = 'enable_lang1 = ?';
+            $whereCase[] = $param['enable_lang1'];
+        }
+        if (isset($param['enable_lang2'])) {
+            $whereSql[] = 'enable_lang2 = ?';
+            $whereCase[] = $param['enable_lang2'];
+        }
+        if (isset($param['enable_lang3'])) {
+            $whereSql[] = 'enable_lang3 = ?';
+            $whereCase[] = $param['enable_lang3'];
+        }
         $whereSql = $whereSql ? ' where ' . implode(' and ', $whereSql) : '';
         return array(
             'sql' => $whereSql,

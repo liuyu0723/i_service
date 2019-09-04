@@ -91,30 +91,35 @@ class PoiController extends \BaseController
         $id = intval($this->getParamList('id'));
         if ($id) {
             $param = array();
-            $param['hotelid'] = $this->getParamList('hotelid');
-            $param['typeid'] = $this->getParamList('typeid');
-            $param['tagid'] = $this->getParamList('tagid');
-            $param['name_lang1'] = $this->getParamList('name_lang1');
-            $param['name_lang2'] = $this->getParamList('name_lang2');
-            $param['name_lang3'] = $this->getParamList('name_lang3');
-            $param['detail_lang1'] = $this->getParamList('detail_lang1');
-            $param['detail_lang2'] = $this->getParamList('detail_lang2');
-            $param['detail_lang3'] = $this->getParamList('detail_lang3');
-            $param['address_lang1'] = $this->getParamList('address_lang1');
-            $param['address_lang2'] = $this->getParamList('address_lang2');
-            $param['address_lang3'] = $this->getParamList('address_lang3');
-            $param['introduct_lang1'] = $this->getParamList('introduct_lang1');
-            $param['introduct_lang2'] = $this->getParamList('introduct_lang2');
-            $param['introduct_lang3'] = $this->getParamList('introduct_lang3');
-            $param['tel'] = $this->getParamList('tel');
-            $param['lat'] = $this->getParamList('lat');
-            $param['lng'] = $this->getParamList('lng');
-            $param['sort'] = $this->getParamList('sort');
-            $param['pdf'] = $this->getParamList('pdf');
-            $param['video'] = $this->getParamList('video');
-            $param['pic'] = $this->getParamList('pic');
-            $param['updatetime'] = time();
-            $param['status'] = $this->getParamList('status');
+            $param ['hotelid'] = $this->getParamList('hotelid');
+            $param ['typeid'] = $this->getParamList('typeid');
+            $param ['tagid'] = $this->getParamList('tagid');
+            $param ['name_lang1'] = $this->getParamList('name_lang1');
+            $param ['name_lang2'] = $this->getParamList('name_lang2');
+            $param ['name_lang3'] = $this->getParamList('name_lang3');
+            $param ['detail_lang1'] = $this->getParamList('detail_lang1');
+            $param ['detail_lang2'] = $this->getParamList('detail_lang2');
+            $param ['detail_lang3'] = $this->getParamList('detail_lang3');
+            $param ['address_lang1'] = $this->getParamList('address_lang1');
+            $param ['address_lang2'] = $this->getParamList('address_lang2');
+            $param ['address_lang3'] = $this->getParamList('address_lang3');
+            $param ['introduct_lang1'] = $this->getParamList('introduct_lang1');
+            $param ['introduct_lang2'] = $this->getParamList('introduct_lang2');
+            $param ['introduct_lang3'] = $this->getParamList('introduct_lang3');
+            $param ['tel'] = $this->getParamList('tel');
+            $param ['lat'] = $this->getParamList('lat');
+            $param ['lng'] = $this->getParamList('lng');
+            $param ['sort'] = $this->getParamList('sort');
+            $param ['pdf'] = $this->getParamList('pdf');
+            $param ['video'] = $this->getParamList('video');
+            $param ['pic'] = $this->getParamList('pic');
+            $param ['updatetime'] = time();
+            $param ['status'] = $this->getParamList('status');
+
+            $param ['homeShow'] = trim($this->getParamList('homeShow'));
+            $param ['startTime'] = trim($this->getParamList('startTime'));
+            $param ['endTime'] = trim($this->getParamList('endTime'));
+
             $data = $this->model->updatePoiById($param, $id);
             $data = $this->convertor->statusConvertor($data);
         } else {
@@ -133,30 +138,48 @@ class PoiController extends \BaseController
     public function addPoiAction()
     {
         $param = array();
-        $param['hotelid'] = $this->getParamList('hotelid');
-        $param['typeid'] = $this->getParamList('typeid');
-        $param['tagid'] = $this->getParamList('tagid');
-        $param['name_lang1'] = $this->getParamList('name_lang1');
-        $param['name_lang2'] = $this->getParamList('name_lang2');
-        $param['name_lang3'] = $this->getParamList('name_lang3');
-        $param['address_lang1'] = $this->getParamList('address_lang1');
-        $param['address_lang2'] = $this->getParamList('address_lang2');
-        $param['address_lang3'] = $this->getParamList('address_lang3');
-        $param['introduct_lang1'] = $this->getParamList('introduct_lang1');
-        $param['introduct_lang2'] = $this->getParamList('introduct_lang2');
-        $param['introduct_lang3'] = $this->getParamList('introduct_lang3');
-        $param['tel'] = $this->getParamList('tel');
-        $param['lat'] = $this->getParamList('lat');
-        $param['lng'] = $this->getParamList('lng');
-        $param['updatetime'] = time();
-        $param['createtime'] = time();
-        $param['status'] = intval($this->getParamList('status'));
-        $param['sort'] = intval($this->getParamList('sort'));
-        $param['pdf'] = trim($this->getParamList('pdf'));
-        $param['video'] = trim($this->getParamList('video'));
-        $param['pic'] = trim($this->getParamList('pic'));
+        $param ['hotelid'] = $this->getParamList('hotelid');
+        $param ['typeid'] = $this->getParamList('typeid');
+        $param ['tagid'] = $this->getParamList('tagid');
+        $param ['name_lang1'] = $this->getParamList('name_lang1');
+        $param ['name_lang2'] = $this->getParamList('name_lang2');
+        $param ['name_lang3'] = $this->getParamList('name_lang3');
+        $param ['address_lang1'] = $this->getParamList('address_lang1');
+        $param ['address_lang2'] = $this->getParamList('address_lang2');
+        $param ['address_lang3'] = $this->getParamList('address_lang3');
+        $param ['introduct_lang1'] = $this->getParamList('introduct_lang1');
+        $param ['introduct_lang2'] = $this->getParamList('introduct_lang2');
+        $param ['introduct_lang3'] = $this->getParamList('introduct_lang3');
+        $param ['tel'] = $this->getParamList('tel');
+        $param ['lat'] = $this->getParamList('lat');
+        $param ['lng'] = $this->getParamList('lng');
+        $param ['updatetime'] = time();
+        $param ['createtime'] = time();
+        $param ['status'] = intval($this->getParamList('status'));
+        $param ['sort'] = intval($this->getParamList('sort'));
+        $param ['pdf'] = trim($this->getParamList('pdf'));
+        $param ['video'] = trim($this->getParamList('video'));
+        $param ['pic'] = trim($this->getParamList('pic'));
         $data = $this->model->addPoi($param);
         $data = $this->convertor->statusConvertor(array('id' => $data));
+        $this->echoSuccessData($data);
+    }
+
+    /**
+     * 获取首页广告列表
+     *
+     * @return Json
+     */
+    public function getHomeAdvAction() {
+        $param = array();
+        $param ['hotelid'] = intval($this->getParamList('hotelid'));
+        $param ['today'] = time();
+        $this->getPageParam($param);
+        if (empty ($param ['hotelid'])) {
+            $this->throwException(2, '入参错误');
+        }
+        $data = $this->model->getHomeAdv($param);
+        $data = $this->convertor->getHomeAdvConvertor($data);
         $this->echoSuccessData($data);
     }
 }

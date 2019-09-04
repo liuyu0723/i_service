@@ -105,7 +105,13 @@ class PushController extends \BaseController {
         $param ['en_value'] = $this->getParamList('en_value');
         $param ['contentType'] = Enum_Push::PUSH_CONTENT_TYPE_URL;
         $param ['contentValue'] = $this->getParamList('url');
-        $data = $this->model->addPushOne($param);
+        $sendTime = intval($this->getParamList('send_time'));
+        if (empty($sendTime)) {
+            $data = $this->model->addPushOne($param);
+        } else {
+            $param['send_time'] = date('Y-m-d H:i:s', $sendTime);
+            $data = $this->model->storeMsg($param);
+        }
         $data = $this->convertor->statusConvertor(array('id' => $data));
         $this->echoSuccessData($data);
     }
@@ -147,11 +153,12 @@ class PushController extends \BaseController {
         }
 
         $param = array();
-        $param ['page'] = intval($this->getParamList('page', 1));
-        $param ['limit'] = intval($this->getParamList('limit', 10));
-        $param ['type'] = Enum_Push::PUSH_TYPE_USER;
-        $param ['dataid'] = $userId;
-        $param ['result'] = 0;
+        $param['page'] = intval($this->getParamList('page', 1));
+        $param['limit'] = intval($this->getParamList('limit', 10));
+        $param['type'] = Enum_Push::PUSH_TYPE_USER;
+        $param['dataid'] = $userId;
+        $param['result'] = 0;
+        $param['is_send'] = PushModel::TIMER_MSG_ALREADY_SEND;
         $data = $this->model->getPushList($param);
         $count = $this->model->getPushCount($param);
         $data = $this->convertor->userMsgListConvertor($data, $count, $param);
@@ -175,6 +182,7 @@ class PushController extends \BaseController {
         $param ['type'] = Enum_Push::PUSH_TYPE_STAFF;
         $param ['dataid'] = $staffId;
         $param ['result'] = 0;
+        $param['is_send'] = PushModel::TIMER_MSG_ALREADY_SEND;
         $data = $this->model->getPushList($param);
         $count = $this->model->getPushCount($param);
         $data = $this->convertor->userMsgListConvertor($data, $count, $param);
@@ -185,7 +193,8 @@ class PushController extends \BaseController {
     /**
      * Get user's history message
      */
-    public function getUserAppMsgListAction() {
+    public function getUserAppMsgListAction()
+    {
         $token = trim($this->getParamList('token'));
         $userId = Auth_Login::getToken($token);
         if (empty ($userId)) {
@@ -193,11 +202,13 @@ class PushController extends \BaseController {
         }
 
         $param = array();
-        $param ['page'] = intval($this->getParamList('page', 1));
-        $param ['limit'] = intval($this->getParamList('limit', 20));
-        $param ['type'] = Enum_Push::PUSH_TYPE_USER;
-        $param ['dataid'] = $userId;
-        $param ['result'] = 0;
+        $param['page'] = intval($this->getParamList('page', 1));
+        $param['limit'] = intval($this->getParamList('limit', 20));
+        $param['type'] = Enum_Push::PUSH_TYPE_USER;
+        $param['dataid'] = $userId;
+        $param['result'] = 0;
+        $param['is_send'] = PushModel::TIMER_MSG_ALREADY_SEND;
+
         $data = $this->model->getPushList($param);
         $count = $this->model->getPushCount($param);
         $data = $this->convertor->userAppMsgListConvertor($data, $count, $param);
@@ -208,7 +219,8 @@ class PushController extends \BaseController {
     /**
      * Get staff's history message
      */
-    public function getStaffAppMsgListAction() {
+    public function getStaffAppMsgListAction()
+    {
         $token = trim($this->getParamList('token'));
         $staffId = Auth_Login::getToken($token, Auth_Login::STAFF_MARK);
         if (empty ($staffId)) {
@@ -216,11 +228,12 @@ class PushController extends \BaseController {
         }
 
         $param = array();
-        $param ['page'] = intval($this->getParamList('page', 1));
-        $param ['limit'] = intval($this->getParamList('limit', 20));
-        $param ['type'] = Enum_Push::PUSH_TYPE_STAFF;
-        $param ['dataid'] = $staffId;
-        $param ['result'] = 0;
+        $param['page'] = intval($this->getParamList('page', 1));
+        $param['limit'] = intval($this->getParamList('limit', 20));
+        $param['type'] = Enum_Push::PUSH_TYPE_STAFF;
+        $param['dataid'] = $staffId;
+        $param['result'] = 0;
+        $param['is_send'] = PushModel::TIMER_MSG_ALREADY_SEND;
         $data = $this->model->getPushList($param);
         $count = $this->model->getPushCount($param);
         $data = $this->convertor->userAppMsgListConvertor($data, $count, $param);
@@ -252,5 +265,27 @@ class PushController extends \BaseController {
         $logInfo = array('params' => json_encode($this->getParamList()), 'result' => json_encode($data));
         Log_File::writeLog('shoppingboxPushMsg', implode("\n", $logInfo));
         $this->echoSuccessData($data);
+    }
+
+    /**
+     * Get message list and send it if necessary
+     */
+    public function timerPushAction()
+    {
+        $now = time();
+        $param = array(
+            'is_send' => PushModel::TIMER_MSG_NOT_SEND,
+            'send_time' => date("Y-m-d H:i:s", $now),
+        );
+        $msgList = $this->model->getPushList($param);
+        if (count($msgList) == 0) {
+            exit();
+        } else {
+            Log_File::writeSimpleLog($this->model::TIMER_CRONTAB_LOG, "Start");
+            Log_File::writeSimpleLog($this->model::TIMER_CRONTAB_LOG, sprintf("%s messages need to be sent.", count($msgList)));
+            $this->model->processList($msgList);
+            Log_File::writeSimpleLog($this->model::TIMER_CRONTAB_LOG, "Finish");
+        }
+
     }
 }
