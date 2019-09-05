@@ -1,12 +1,15 @@
 <?php
+
 use Illuminate\Database\Capsule\Manager as DB;
 
 
-class ActivityModel extends \BaseModel {
+class ActivityModel extends \BaseModel
+{
 
     private $dao;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->dao = new Dao_Activity();
     }
@@ -18,7 +21,8 @@ class ActivityModel extends \BaseModel {
      *            array param 查询条件
      * @return array
      */
-    public function getActivityList(array $param) {
+    public function getActivityList(array $param)
+    {
         $param['id'] ? $paramList['id'] = $param['id'] : false;
         $param['hotelid'] ? $paramList['hotelid'] = intval($param['hotelid']) : false;
         $param['groupid'] ? $paramList['groupid'] = intval($param['groupid']) : false;
@@ -37,7 +41,8 @@ class ActivityModel extends \BaseModel {
      *            array param 查询条件
      * @return array
      */
-    public function getActivityCount(array $param) {
+    public function getActivityCount(array $param)
+    {
         $paramList = array();
         $param['id'] ? $paramList['id'] = intval($param['id']) : false;
         $param['hotelid'] ? $paramList['hotelid'] = intval($param['hotelid']) : false;
@@ -55,7 +60,8 @@ class ActivityModel extends \BaseModel {
      *            int id 查询的主键
      * @return array
      */
-    public function getActivityDetail($id) {
+    public function getActivityDetail($id)
+    {
         $result = array();
         if ($id) {
             $result = $this->dao->getActivityDetail($id);
@@ -72,7 +78,8 @@ class ActivityModel extends \BaseModel {
      *            int id 主键
      * @return array
      */
-    public function updateActivityById($param, $id) {
+    public function updateActivityById($param, $id)
+    {
         $result = false;
         if ($id) {
             isset($param['hotelid']) ? $info['hotelid'] = $param['hotelid'] : false;
@@ -99,9 +106,18 @@ class ActivityModel extends \BaseModel {
             isset($param['pdf']) ? $info['pdf'] = $param['pdf'] : false;
             isset($param['video']) ? $info['video'] = $param['video'] : false;
 
-            isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
-            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
-            isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
+            isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : 0;
+            if ($info['homeShow'] == '') {
+                $info['homeShow'] = 1;
+            }
+            isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : time();
+            if ($info['startTime'] == '') {
+                $info['startTime'] = time();
+            }
+            isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : time();
+            if ($info['endTime'] == '') {
+                $info['endTime'] = time();
+            }
 
             $info['updatetime'] = time();
             $result = $this->dao->updateActivityById($info, $id);
@@ -116,7 +132,8 @@ class ActivityModel extends \BaseModel {
      *            array param 需要增加的信息
      * @return array
      */
-    public function addActivity($param) {
+    public function addActivity($param)
+    {
         isset($param['hotelid']) ? $info['hotelid'] = $param['hotelid'] : false;
         isset($param['groupid']) ? $info['groupid'] = $param['groupid'] : false;
         isset($param['tagid']) ? $info['tagid'] = $param['tagid'] : false;
@@ -134,14 +151,23 @@ class ActivityModel extends \BaseModel {
         $info['createtime'] = time();
         $info['updatetime'] = $info['createtime'];
 
-        isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : false;
-        isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : false;
-        isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : false;
-        
+        isset($param['homeShow']) ? $info['homeShow'] = $param['homeShow'] : 0;
+        if ($info['homeShow'] == '') {
+            $info['homeShow'] = 1;
+        }
+        isset($param['startTime']) ? $info['startTime'] = $param['startTime'] : time();
+        if ($info['startTime'] == '') {
+            $info['startTime'] = time();
+        }
+        isset($param['endTime']) ? $info['endTime'] = $param['endTime'] : time();
+        if ($info['endTime'] == '') {
+            $info['endTime'] = time();
+        }
+
         return $this->dao->addActivity($info);
     }
 
-    public function addPhoto($params) : int
+    public function addPhoto($params): int
     {
         if (empty($params['activity_id']) || empty($params['pic']) || empty($params['hotelid'])) {
             $this->throwException("lack param[activity_id, pic]", 1);
@@ -155,7 +181,6 @@ class ActivityModel extends \BaseModel {
         $model->save();
 
         return $model->id;
-
     }
 
     public function updatePhotoById(array $params, int $id)
@@ -189,6 +214,4 @@ class ActivityModel extends \BaseModel {
 
         return $data;
     }
-
-
 }
