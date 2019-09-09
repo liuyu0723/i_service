@@ -13,6 +13,7 @@ class Dao_Hotel extends Dao_Base
     private $order_status = "W";
     private $res_clerk = "WEB";
     private $acc_type = "A";
+    private $mapping_local_hotel_id = 29;
 
     public function __construct()
     {
@@ -149,7 +150,7 @@ class Dao_Hotel extends Dao_Base
                     // load iservice data to 
                     $romeTypeListDao = new Dao_Roomtype();
                     $rtparamList = array();
-                    $rtparamList['hotelid'] = 99;
+                    $rtparamList['hotelid'] = $this->mapping_local_hotel_id;
                     $rtparamList['limit'] = 999;
 
                     $roomTypeList = $romeTypeListDao->getRoomtypeList($rtparamList);
